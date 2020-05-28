@@ -39,15 +39,18 @@ BLD_DIR=${TOOLCHAIN_BLD}/${TOOLCHAIN_NAME}_build
 INSTALL_DIR=${TOOLCHAIN_DIR}/${TOOLCHAIN_NAME}
 
 # get sources
-if [ -f /vagrant/mimid/toolchain.tar.gz ];
+if [ -f /vagrant/mimid/toolchains.tar.gz ];
 then
-  zcat /vagrant/mimid/toolchain.tar.gz | tar -xpf -
+  echo Exists
+  mkdir -p "${SRC_DIR}"
+  (cd ~/ && zcat /vagrant/mimid/toolchains.tar.gz | tar -xpf - )
 else
+  echo Doesnt Exist
   mkdir -p "${SRC_DIR}"
   svn co "${LLVM_URL}/llvm/tags/RELEASE_${LLVM_VER}/final/" "${SRC_DIR}"             || die_svn "unable to get llvm svn repository"  "${SRC_DIR}"
   svn co "${LLVM_URL}/cfe/tags/RELEASE_${LLVM_VER}/final/"  "${SRC_DIR}/tools/clang" || die_svn "unable to get clang svn repository" "${SRC_DIR}/tools/clang"
-  tar -cf /vagrant/mimid/toolchain.tar ${SRC_DIR}
-  gzip /vagrant/mimid/toolchain.tar
+  tar -cf /vagrant/mimid/toolchains.tar toolchains/build/
+  gzip /vagrant/mimid/toolchains.tar
 fi
 #
 # fix build with gcc 8.x see https://bugzilla.redhat.com/show_bug.cgi?id=1540620

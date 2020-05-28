@@ -25,7 +25,9 @@ mimid.box: $(ARTIFACT)
 	cd artifact && vagrant ssh -c 'cd /vagrant; tar -cpf ~/mimid.tar mimid ; cd ~/; tar -xpf ~/mimid.tar; rm -f ~/mimid.tar'
 	cd artifact && vagrant ssh -c 'cd ~/ && zcat /vagrant/mimid/taints.tar.gz | tar -xpf -'
 	cd artifact && vagrant ssh -c 'cd ~/ && echo export PATH="/usr/local/opt/llvm@4/bin:$$PATH" > ~/.init.sh'
+	cat toolchains.tar.gz.1 toolchains.tar.gz.2 > artifact/mimid/toolchains.tar.gz
 	cd artifact && vagrant ssh -c 'cd ~/taints/ && cp /vagrant/mimid/setup_llvm_clang.sh ./scripts/ && ./scripts/setup_llvm_clang.sh'
+	# cp artifact/mimid/toolchain.tar.gz .
 	cd artifact && vagrant ssh -c 'cd ~/taints/ && source ~/.init.sh && meson build/debug --prefix="$$(pwd)/install"'
 	cd artifact && vagrant ssh -c 'cd ~/taints/ && source ~/.init.sh && ninja -C build/debug install'
 	cd artifact && vagrant package --output ../mimid1.box --vagrantfile ../Vagrantfile.new
