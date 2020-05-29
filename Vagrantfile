@@ -19,7 +19,7 @@ Vagrant.configure("2") do |config|
   # apt-get -y install openjdk-11-jre-headless make docker.io graphviz python3-venv python3-pip
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
-    apt-get -y install openjdk-11-jre-headless make graphviz python3-venv python3-pip ninja-build libjson-c-dev cmake subversion meson
+    apt-get -y install openjdk-11-jdk-headless make graphviz python3-venv python3-pip ninja-build libjson-c-dev cmake subversion meson
     pip3 install wheel
     pip3 install graphviz
     pip3 install jupyter
