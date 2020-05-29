@@ -30,8 +30,8 @@ mimid.box: $(ARTIFACT)
 	cd artifact && vagrant ssh -c 'cd ~/taints/ && cp /vagrant/mimid/setup_llvm_clang.sh ./scripts/ && ./scripts/setup_llvm_clang.sh'
 	# cp artifact/mimid/toolchain.tar.gz .
 	cd artifact && vagrant ssh -c 'zcat /vagrant/mimid/json-c-0.13.1-20180305.tar.gz | tar -xvpf -'
-	cd artifact && vagrant ssh -c '/home/vagrant/json-c-json-c-0.13.1-20180305 && ./configure --prefix=/usr && make'
-	cd artifact && vagrant ssh -c '/home/vagrant/json-c-json-c-0.13.1-20180305 && sudo make install'
+	cd artifact && vagrant ssh -c 'cd /home/vagrant/json-c-json-c-0.13.1-20180305 && ./configure --prefix=/usr && make'
+	cd artifact && vagrant ssh -c 'cd /home/vagrant/json-c-json-c-0.13.1-20180305 && sudo make install'
 	cd artifact && vagrant ssh -c 'cd ~/taints/ && source ~/.init.sh && meson build/debug --prefix="$$(pwd)/install"'
 	cd artifact && vagrant ssh -c 'cd ~/taints/ && source ~/.init.sh && ninja -C build/debug install'
 	cd artifact && vagrant package --output ../mimid1.box --vagrantfile ../Vagrantfile.new
