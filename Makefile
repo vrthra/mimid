@@ -10,7 +10,7 @@ results:; mkdir -p results
 artifact.tar.gz: Vagrantfile Makefile
 	rm -rf artifact && mkdir -p artifact/mimid
 	cp README.md artifact/README.txt
-	cp -r README.md src Makefile Vagrantfile taints.tar.gz etc/setup_llvm_clang.sh  etc/json-c-0.13-20171207.tar.gz artifact/mimid
+	cp -r README.md src Makefile Vagrantfile taints.tar.gz etc/setup_llvm_clang.sh  etc/json-c-0.13.1-20180305.tar.gz artifact/mimid
 	cp -r Vagrantfile artifact/
 	tar -cf artifact1.tar artifact
 	gzip artifact1.tar
@@ -29,9 +29,9 @@ mimid.box: $(ARTIFACT)
 	cat toolchains.tar.gz.1 toolchains.tar.gz.2 > artifact/mimid/toolchains.tar.gz
 	cd artifact && vagrant ssh -c 'cd ~/taints/ && cp /vagrant/mimid/setup_llvm_clang.sh ./scripts/ && ./scripts/setup_llvm_clang.sh'
 	# cp artifact/mimid/toolchain.tar.gz .
-	cd artifact && vagrant ssh -c 'zcat /vagrant/mimid/json-c-0.13-20171207.tar.gz | tar -xvpf -'
-	cd artifact && vagrant ssh -c '/home/vagrant/json-c-json-c-0.13-20171207 && ./configure --prefix=/usr && make'
-	cd artifact && vagrant ssh -c '/home/vagrant/json-c-json-c-0.13-20171207 && sudo make install'
+	cd artifact && vagrant ssh -c 'zcat /vagrant/mimid/json-c-0.13.1-20180305.tar.gz | tar -xvpf -'
+	cd artifact && vagrant ssh -c '/home/vagrant/json-c-json-c-0.13.1-20180305 && ./configure --prefix=/usr && make'
+	cd artifact && vagrant ssh -c '/home/vagrant/json-c-json-c-0.13.1-20180305 && sudo make install'
 	cd artifact && vagrant ssh -c 'cd ~/taints/ && source ~/.init.sh && meson build/debug --prefix="$$(pwd)/install"'
 	cd artifact && vagrant ssh -c 'cd ~/taints/ && source ~/.init.sh && ninja -C build/debug install'
 	cd artifact && vagrant package --output ../mimid1.box --vagrantfile ../Vagrantfile.new
