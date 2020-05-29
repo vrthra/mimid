@@ -19,7 +19,7 @@ artifact.tar.gz: Vagrantfile Makefile
 ARTIFACT=artifact.tar.gz
 
 # PACKAGING
-# https://github.com/json-c/json-c/archive/json-c-0.13-20171207.tar.gz
+# https://github.com/json-c/json-c/archive/json-c-0.13.1-20180305.tar.gz
 box-create: mimid.box
 mimid.box: $(ARTIFACT)
 	cd artifact && vagrant up
