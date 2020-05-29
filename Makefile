@@ -79,3 +79,6 @@ rrm:
 
 rlink:
 	rclone link $(REMOTE)fse2020/
+
+rsync:
+	rsync -avz  --partial-dir=.rsync-partial --progress --rsh="ssh" mimid.box shuttle:/scratch/rahul/vm/
