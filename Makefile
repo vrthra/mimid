@@ -10,7 +10,7 @@ results:; mkdir -p results
 artifact.tar.gz: Vagrantfile Makefile
 	rm -rf artifact && mkdir -p artifact/mimid
 	cp README.md artifact/README.txt
-	cp -r README.md src Makefile Vagrantfile taints.tar.gz etc/setup_llvm_clang.sh  etc/json-c-0.13.1-20180305.tar.gz artifact/mimid
+	cp -r README.md src Cmimid Makefile Vagrantfile taints.tar.gz etc/setup_llvm_clang.sh  etc/json-c-0.13.1-20180305.tar.gz artifact/mimid
 	cp -r Vagrantfile artifact/
 	tar -cf artifact1.tar artifact
 	gzip artifact1.tar
@@ -23,7 +23,7 @@ ARTIFACT=artifact.tar.gz
 box-create: mimid.box
 mimid.box: $(ARTIFACT)
 	cd artifact && vagrant up
-	cd artifact && vagrant ssh -c 'cd /vagrant; tar -cpf ~/mimid.tar mimid ; cd ~/; tar -xpf ~/mimid.tar; rm -f ~/mimid.tar'
+	cd artifact && vagrant ssh -c 'cd /vagrant; tar -cpf ~/mimid.tar mimid/src mimid/Makefile mimid/README.md; cd ~/; tar -xpf ~/mimid.tar; rm -f ~/mimid.tar'
 	cd artifact && vagrant ssh -c 'cd ~/ && zcat /vagrant/mimid/taints.tar.gz | tar -xpf -'
 	cd artifact && vagrant ssh -c 'cd ~/ && echo export PATH="/usr/local/opt/llvm@4/bin:/usr/local/bin:$$PATH" > ~/.init.sh'
 	cat toolchains.tar.gz.1 toolchains.tar.gz.2 > artifact/mimid/toolchains.tar.gz
