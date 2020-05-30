@@ -19,12 +19,12 @@ Vagrant.configure("2") do |config|
   # apt-get -y install openjdk-11-jre-headless make docker.io graphviz python3-venv python3-pip libjson-c-dev
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update
-    apt-get -y install openjdk-11-jdk-headless make graphviz python3-venv python3-pip ninja-build cmake subversion meson pkg-config  llvm-4.0 llvm-4.0-dev zlib1g-dev
+    apt-get -y install openjdk-11-jdk-headless make graphviz python3-venv python3-pip ninja-build cmake subversion pkg-config  llvm-4.0 llvm-4.0-dev zlib1g-dev
     pip3 install wheel
     pip3 install graphviz
     pip3 install jupyter
     pip3 install pudb
-    pip3 install --user meson==0.46.1
+    pip3 install meson==0.46.1
 
     pip3 install jupyter_contrib_nbextensions
     pip3 install jupyter_nbextensions_configurator
