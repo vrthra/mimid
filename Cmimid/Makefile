@@ -137,3 +137,9 @@ build/%.fuzz: build/%.grammar build/%.out
 	$(PYTHON) ./src/fuzz.py  $^ $(FUZZCOUNT)
 	mv build/$*.out.fuzz $@
 
+
+precision: build/tiny.precision build/mjs.precision build/json.precision
+	cat build/*.precision
+
+fuzz: build/tiny.fuzz build/mjs.fuzz build/json.fuzz
+	cat build/*.fuzz
