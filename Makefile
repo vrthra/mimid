@@ -25,8 +25,6 @@ box-create: mimid.box
 mimid.box: $(ARTIFACT)
 	cd artifact && vagrant up
 	cd artifact && vagrant ssh -c 'cd /vagrant; tar -cpf ~/mimid.tar mimid/Cmimid mimid/src mimid/Makefile mimid/README.md; cd ~/; tar -xpf ~/mimid.tar; rm -f ~/mimid.tar'
-	cd artifact && vagrant ssh -c 'cp /vagrant/mimid/src/Parser.py /home/vagrant/.local/lib/python3.7/site-packages/fuzzingbook/Parser.py'
-	cd artifact && vagrant ssh -c 'cp /vagrant/mimid/src/GrammarMiner.py /home/vagrant/.local/lib/python3.7/site-packages/fuzzingbook/GrammarMiner.py'
 	cd artifact && vagrant ssh -c 'cd ~/ && zcat /vagrant/mimid/taints.tar.gz | tar -xpf -'
 	cd artifact && vagrant ssh -c 'cd ~/ && echo export PATH="/usr/local/opt/llvm@4/bin:/usr/local/bin:$$PATH" > ~/.init.sh'
 	cat toolchains.tar.gz.1 toolchains.tar.gz.2 > artifact/mimid/toolchains.tar.gz

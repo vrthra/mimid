@@ -30,6 +30,8 @@ Vagrant.configure("2") do |config|
     pip3 install fuzzingbook
     pip3 install meson==0.46.1
 
+    cp /vagrant/mimid/src/Parser.py /usr/local/lib/python3.7/dist-packages/fuzzingbook/Parser.py
+    cp /vagrant/mimid/src/GrammarMiner.py /usr/local/lib/python3.7/dist-packages/fuzzingbook/GrammarMiner.py
     pip3 install jupyter_contrib_nbextensions
     pip3 install jupyter_nbextensions_configurator
     jupyter contrib nbextension install --sys-prefix
