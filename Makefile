@@ -11,7 +11,7 @@ artifact.tar.gz: Vagrantfile Makefile
 	rm -rf artifact && mkdir -p artifact/mimid
 	cp README.md artifact/README.txt
 	cp -r README.md src Cmimid Makefile Vagrantfile taints.tar.gz etc/setup_llvm_clang.sh  etc/json-c-0.13.1-20180305.tar.gz artifact/mimid
-	cp -r json.tar.gz artifact/mimid/src
+	cp -r etc/json.tar.gz artifact/mimid/src
 	cp -r Vagrantfile artifact/
 	tar -cf artifact1.tar artifact
 	gzip artifact1.tar
