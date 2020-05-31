@@ -51,22 +51,38 @@ def remove_recursion(d):
         new_d[k] = new_rs
     return new_d
 
-def replaceable_with_kind(stree, orig, parent, gk, command):
-    my_node = None
-    def fill_tree(node):
-        nonlocal my_node
+def fill_tree(tree, parent, gk):
+    filled_tree = []
+    to_fill = [(tree, filled_tree)]
+    while to_fill:
+        (node, filled_node), *to_fill = to_fill
         name, children = node
         if name == gk:
-            my_node = [name, [[parent, []]]]
-            return my_node
+            new_node = [name, [[parent, []]]]
+            my_node = new_node
+            filled_node.extend(new_node)
+            # return my_node
         elif not children:
             if name in ASCII_MAP:
-                return (random.choice(ASCII_MAP[name]), [])
-            return (name, [])
+                new_node = [random.choice(ASCII_MAP[name]), []]
+                filled_node.extend(new_node)
+                # return (random.choice(ASCII_MAP[name]), [])
+            else:
+                new_node = [name, []]
+                filled_node.extend(new_node)
+                # return (name, [])
         else:
-            return (name, [fill_tree(c) for c in children])
+            # update the new nodes
+            child_nodes = [[] for c in children]
+            new_node = [name, child_nodes]
+            filled_node.extend(new_node)
+            to_fill = [(c, child_nodes[i]) for i,c in enumerate(children)] + to_fill
+    return my_node, filled_tree
 
-    tree0 = fill_tree(stree)
+
+def replaceable_with_kind(stree, orig, parent, gk, command):
+    my_node, tree0 = fill_tree(stree, parent, gk)
+    #print(json.dumps(tree0, indent=4), file=sys.stderr)
     sval = util.tree_to_str(tree0)
     assert my_node is not None
     a1 = my_node, '', tree0
@@ -148,20 +164,7 @@ def do_n(tree, kind, gk, command, n):
     return (gk, ret)
 
 def find_max_widened(tree, kind, gk, command):
-    my_node = None
-    def fill_tree(node):
-        nonlocal my_node
-        name, children = node
-        if name == gk:
-            my_node = [name, [[kind, []]]]
-            return my_node
-        elif not children:
-            if name in ASCII_MAP:
-                return (random.choice(ASCII_MAP[name]), [])
-            return (name, [])
-        else:
-            return (name, [fill_tree(c) for c in children])
-    tree0 = fill_tree(tree)
+    my_node, tree0 = fill_tree(tree, kind, gk)
     sval = util.tree_to_str(tree0)
     assert my_node is not None
     a1 = my_node, '', tree0

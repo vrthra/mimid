@@ -181,6 +181,22 @@ def get_ref(node, node_name):
     return None
 
 
+def copy_rec(tree):
+    filled_tree = []
+    to_fill = [(tree, filled_tree)]
+    while to_fill:
+        (node, filled_node), *to_fill = to_fill
+        name, children, *rest = node
+        if not children:
+            new_node = [name, [], *rest]
+            filled_node.extend(new_node)
+        else:
+            child_nodes = [[] for c in children]
+            new_node = [name, child_nodes]
+            filled_node.extend(new_node)
+            to_fill = [(c, child_nodes[i]) for i,c in enumerate(children)] + to_fill
+    return filled_tree
+
 # replace the given node in a2 by the node in a1
 def replace_nodes(a2, a1):
     node2, _, t2 = a2
@@ -191,8 +207,11 @@ def replace_nodes(a2, a1):
     tmpl_name = '___cmimid___'
     old_name = node2[0]
     node2[0] = tmpl_name
-    v = json.dumps(t2)
-    t2_new = json.loads(v)
+
+    #vstr = str(t2)
+    #v = json.dumps(t2)
+    #t2_new = json.loads(v)
+    t2_new = copy_rec(t2)
     node2[0] = old_name
 
     # now find the reference to tmpl_name in t2_new
