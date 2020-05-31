@@ -1,7 +1,7 @@
 .SECONDARY:
 
 PYTHON=python3
-pfuzzer=../taints
+pfuzzer=../../taints
 CC=clang-8
 
 CFLAGS=-xc++ -std=c++14
@@ -25,7 +25,7 @@ build/%.o.x: build/%.orig.c
 	$(CC) $(CFLAGS) -g -o $@ $< -I ./examples
 
 
-build/%.orig.c: examples/%.c
+build/%.orig.c: examples/%.c | build
 	CFLAGS=$(CFLAGS) LIBCLANG_PATH=$(LIBCLANG_PATH) $(PYTHON) ./src/simplify.py $< > $@_.tmp
 	cat $@_.tmp | $(CLANG_FORMAT) > $@_
 	mv $@_ $@
@@ -48,7 +48,7 @@ build/%.d: examples/%.c src/instrument.py | build
 	cp examples/*.h build/
 	CFLAGS=$(CFLAGS) LIBCLANG_PATH=$(LIBCLANG_PATH) $(PYTHON) ./src/instrument.py $<
 
-build/%.input: examples/%.input
+build/%.input: examples/%.input | build
 	cat $< > $@
 
 build/%.inputs.done: examples/%.grammar
