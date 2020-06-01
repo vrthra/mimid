@@ -59,8 +59,8 @@ def fill_tree(tree, parent, gk):
         name, children = node
         if name == gk:
             new_node = [name, [[parent, []]]]
-            my_node = new_node
             filled_node.extend(new_node)
+            my_node = filled_node
             # return my_node
         elif not children:
             if name in ASCII_MAP:
