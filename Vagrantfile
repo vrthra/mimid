@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder "./mimid", "/vagrant/mimid"
 
   config.vm.provider "virtualbox" do |v|
-    v.memory = 8048
+    v.memory = 10240
     v.cpus = 2
   end
 
@@ -42,10 +42,10 @@ Vagrant.configure("2") do |config|
 
     echo cd /home/vagrant/mimid/Cmimid >  /home/vagrant/starttests.sh
     echo make precision fuzz >>  /home/vagrant/starttests.sh
-    echo echo precision >>   /home/vagrant/starttests.sh
-    echo make precision>>  /home/vagrant/starttests.sh
-    echo echo fuzz >>   /home/vagrant/starttests.sh
-    echo make fuzz>>  /home/vagrant/starttests.sh
+    echo echo === precision === >>   /home/vagrant/starttests.sh
+    echo "cat build/*.precision" >>   /home/vagrant/starttests.sh
+    echo echo === fuzz === >>   /home/vagrant/starttests.sh
+    echo "cat build/*.fuzz" >>   /home/vagrant/starttests.sh
     chmod +x /home/vagrant/starttests.sh
   SHELL
 end
