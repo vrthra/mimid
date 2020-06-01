@@ -138,7 +138,7 @@ def check_accurate(o, x, e, ut, module, sa1, sa2):
 
     with open('%s.log' % module, 'a+') as f:
         print('------------------', file=f)
-        print(' '.join(["python", "build/%s" % module, s]), file=f)
+        print(' '.join(["python3", "build/%s" % module, s]), file=f)
         print('Checking:',e, file=f)
         print('original:', repr(o), file=f)
         print('tmpl:', repr(x), file=f)
