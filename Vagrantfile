@@ -42,8 +42,8 @@ Vagrant.configure("2") do |config|
     chmod +x /home/vagrant/startjupyter.sh
 
     echo cd /home/vagrant/mimid >  /home/vagrant/start_py_tests.sh
-    #echo jupyter nbconvert --to notebook --execute PymimidBook.ipynb --output=PymimidBook_.ipynb >>  /home/vagrant/start_py_tests.sh
-    echo jupyter nbconvert --to html --execute PymimidBook.ipynb --output=PymimidBook.html >>  /home/vagrant/start_py_tests.sh
+    #echo jupyter nbconvert --to notebook --execute src/PymimidBook.ipynb --output=src/PymimidBook_.ipynb >>  /home/vagrant/start_py_tests.sh
+    echo jupyter nbconvert --to html --execute src/PymimidBook.ipynb --ExecutePreprocessor.timeout=36000 --output=PymimidBook.html >>  /home/vagrant/start_py_tests.sh
     chmod +x /home/vagrant/start_py_tests.sh
 
     echo cd /home/vagrant/mimid/Cmimid >  /home/vagrant/start_c_tests.sh
