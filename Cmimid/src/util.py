@@ -172,14 +172,15 @@ def node_include(i, j):
     return s_i <= s_j and e_i >= e_j
 
 def get_ref(node, node_name):
-    name, children, *rest = node
-    if name == node_name:
-        return node
-    for child in children:
-        res = get_ref(child, node_name)
-        if res is not None: return res
+    stack = [node]
+    while stack:
+        my_node, *stack = stack
+        name, children, *rest = my_node
+        if name == node_name:
+            return my_node
+        else:
+            stack = children + stack
     return None
-
 
 def copy_rec(tree):
     filled_tree = []
