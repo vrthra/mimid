@@ -36,16 +36,22 @@ Vagrant.configure("2") do |config|
     pip3 install jupyter_nbextensions_configurator
     jupyter contrib nbextension install --sys-prefix
     jupyter nbextension enable toc2/main --sys-prefix
+
     echo cd /home/vagrant/mimid >  /home/vagrant/startjupyter.sh
     echo jupyter notebook --ip 0.0.0.0 --port 8888 >> /home/vagrant/startjupyter.sh
     chmod +x /home/vagrant/startjupyter.sh
 
-    echo cd /home/vagrant/mimid/Cmimid >  /home/vagrant/starttests.sh
-    echo make precision fuzz >>  /home/vagrant/starttests.sh
-    echo echo === precision === >>   /home/vagrant/starttests.sh
-    echo "cat build/*.precision" >>   /home/vagrant/starttests.sh
-    echo echo === fuzz === >>   /home/vagrant/starttests.sh
-    echo "cat build/*.fuzz" >>   /home/vagrant/starttests.sh
-    chmod +x /home/vagrant/starttests.sh
+    echo cd /home/vagrant/mimid >  /home/vagrant/start_py_tests.sh
+    #echo jupyter nbconvert --to notebook --execute PymimidBook.ipynb --output=PymimidBook_.ipynb >>  /home/vagrant/start_py_tests.sh
+    echo jupyter nbconvert --to html --execute PymimidBook.ipynb --output=PymimidBook.html >>  /home/vagrant/start_py_tests.sh
+    chmod +x /home/vagrant/start_py_tests.sh
+
+    echo cd /home/vagrant/mimid/Cmimid >  /home/vagrant/start_c_tests.sh
+    echo make precision fuzz >>  /home/vagrant/start_c_tests.sh
+    echo echo === precision === >>   /home/vagrant/start_c_tests.sh
+    echo "cat build/*.precision" >>   /home/vagrant/start_c_tests.sh
+    echo echo === fuzz === >>   /home/vagrant/start_c_tests.sh
+    echo "cat build/*.fuzz" >>   /home/vagrant/start_c_tests.sh
+    chmod +x /home/vagrant/start_c_tests.sh
   SHELL
 end
