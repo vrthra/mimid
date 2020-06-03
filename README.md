@@ -238,9 +238,9 @@ The following are the C programs
 
 | Program         | Input Language Kind | Description |
 |-----------------|---------------------|-------------|
-| mjs             | Context Free        | The embedded Javascript interpreter. |
-| tiny            | Context Free        | The `tinyC` C compiler. |
-| json            | Context Free        | A JSON parser. |
+| mjs.c           | Context Free        | The embedded Javascript interpreter. |
+| tiny.c          | Context Free        | The `tinyC` C compiler. |
+| json.c          | Context Free        | A JSON parser. |
 
 The C experiments are not accessible from the Jupyter notebook as it requires
 instrumenting the C programs. Further, the set of C programs is intended as
