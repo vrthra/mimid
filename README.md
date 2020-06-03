@@ -234,6 +234,14 @@ parseclisp.py
 
 ### C experiments
 
+The following are the C programs
+
+| Program         | Input Language Kind | Description |
+|-----------------|---------------------|-------------|
+| mjs             | Context Free        | The embedded Javascript interpreter. |
+| tiny            | Context Free        | The `tinyC` C compiler. |
+| json            | Context Free        | A JSON parser. |
+
 The C experiments are not accessible from the Jupyter notebook as it requires
 instrumenting the C programs. Further, the set of C programs is intended as
 a demonstration of how to use the _mimid_ algorithm in a standalone fashion.
