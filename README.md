@@ -49,7 +49,7 @@ $ du -ksh mimid.box
 2.6G  mimid.box
 
 $ md5sum mimid.box 
-f0999bdd1649d48ea8140c976da82404  mimid.box
+2bd3966d24ea01c9cbea44d2797c20b3  mimid.box
 ```
 
 #### Importing the box
@@ -115,7 +115,14 @@ Swap:             1           0           1
 vm$ pwd
 /home/vagrant
 vm$ ls
-mimid  start_c_tests.sh  startjupyter.sh  start_py_tests.sh  taints  toolchains
+mimid
+c_tables.sh
+py_tables.sh
+start_c_tests.sh
+start_py_tests.sh
+startjupyter.sh
+taints
+toolchains
 ```
 
 The following are the important files
@@ -124,14 +131,14 @@ The following are the important files
 |------------------------------|-----------------------------------------------------------------------------|
 | startjupyter.sh              | The script to start Jupyter notebook to view examples. |
 | start_py_tests.sh            | Start the _Python_ experiments. |
+| py_tables.sh                 | CLI for viewing the results from C experiments. |
 | start_c_tests.sh             | Start the _C_ experiments. |
-| taints/                      | The module to instrument C files. |
-| toolchains/                  | The original LLVM and Clang tool chain. |
+| c_tables.sh                  | CLI for viewing the results from Python experiments. |
 | mimid/src/                   | The main _mimid_ algorithm implementation. |
 | mimid/Cmimid                 | The modularized _mimid_ implementation (in Python) experiments in _C_. |
 | mimid/src/PymimidBook.ipynb  | The detailed _mimid_ notebook which also contains experiments in _Python_. |
-| mimid/src/c_tables.py        | CLI for viewing the results from Python experiments. |
-| mimid/src/py_tables.py       | CLI for viewing the results from C experiments. |
+| toolchains/                  | The original LLVM and Clang tool chain. |
+| taints/                      | The module to instrument C files. |
 
 The most important file here is `mimid/src/PymimidBook.ipynb` which is the
 Jupyter notebook that contains the complete algorithm explained and worked out
@@ -212,25 +219,34 @@ is required for using `py_tables.py`. In that case, please view the results
 directly in the notebook *Results* section.
 
 ```bash
-vm$ python3 ./mimid/src/py_tables.py
-Precision (Table 1)     Mimid
------------------
-calc.py
-mathexpr.py
-cgidecode.py
-urlparse.py
-microjson.py
-parseclisp.py
+vm$ ./py_tables.sh
 
-Recall (Table 2)        Mimid
+Precision (Table 1)     Autogram        Mimid
 -----------------
-calc.py
-mathexpr.py
-cgidecode.py
-urlparse.py
-microjson.py
-parseclisp.py
+calculator.py,  37.5%,  100.0%
+mathexpr.py,    26.9%,  97.8%
+urlparse.py,    100.0%, 100.0%
+cgidecode.py,   47.6%,  100.0%
+microjson.py,   47.5%,  98.6%
+
+Recall (Table 2)        Autogram        Mimid
+-----------------
+calculator.py,  1.6%,   100.0%
+mathexpr.py,    0.2%,   93.4%
+urlparse.py,    100.0%, 95.0%
+cgidecode.py,   34.7%,  100.0%
+microjson.py,   0.0%,   93.0%
 ```
+
+Here, we compare the results from *Autogram* to the results from *mimid*.
+What this means is that the grammar inferred by *mimid* for `microjson`
+(for example) can generate inputs such that 98.6% of such inputs were
+accepted by `microjson.py` when compared to the grammar inferred
+by *Autogram* that could only produce 47.5% valid inputs (Table 1).
+Similarly, if one generates valid *Javascript* strings, then 93.0% of such
+inputs would be parsed correctly by a parser that uses the grammar mined by
+*mimid* from `microjson` when compared to a parser using a grammar mined
+using *Autogram* from `microjson` which accepts 0.0% of the inputs (Table 2).
 
 ### C experiments
 
@@ -266,7 +282,7 @@ as is. The following command line produces the results (table names are in
 correspondence with the paper).
 
 ```bash
-vm$ python3 ./mimid/src/c_tables.py
+vm$ ./c_tables.sh
 Precision (Table 1)     Mimid
 -----------------
 mjs     97.5%
