@@ -65,8 +65,8 @@ box-connect1:
 box-connect2:
 	cd vtest; vagrant ssh
 
-REMOTE=mimid-fse2020:
 REMOTE=anonymous-fse2020:
+REMOTE=mimid-fse2020:
 
 rupload:
 	rm -rf mimid.fse2020 && mkdir -p mimid.fse2020
