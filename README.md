@@ -1,25 +1,59 @@
 # Replication package for _Mining Input Grammars From Dynamic Control Flow_
 
-Our submission is a tool that implements the algorithm given in the paper _Mining Input Grammars From Dynamic Control Flow_.
-We provide a file `artifact.tar.gz` which contains the code to reproduce our
-results. The `artifact.tar.gz` contains [src/PymimidBook.ipynb](https://github.com/vrthra/mimid/blob/master/src/PymimidBook.ipynb) which contains the
-complete algorithm explained and worked out in one simple example in a [Jupyter notebook](https://jupyter.org/).
-It also contains all the Python experiments. It can be viewed through
-either the virtual box as explained below, or can be directly viewed using any
-of the Jupyter notebook viewers including VSCode, or github ([from this link](https://github.com/vrthra/mimid/blob/master/src/PymimidBook.ipynb)).
+**IMPORTANT** This package is hosted at Github [in this repository](https://github.com/vrthra/mimid).
+
+Our submission is a tool that implements the algorithm given in the paper
+_Mining Input Grammars From Dynamic Control Flow_.
+We provide the virtual machine [mimid](https://drive.google.com/open?id=1-v4v6Sz4IB-xpF9tmz1TaqMUPkP-2Fs7)
+(hosted on google drive) which contains the complete artifacts necessary to
+reproduce our experiments. We describe the process of invoking the virtual
+machine below.
+
+We also note that if you are unable to download the vagrant box (It is 3 GB)
+You can also take a look at the complete worked out example of how to derive
+grammar for an example program at [src/PymimidBook.ipynb](https://github.com/vrthra/mimid/blob/master/src/PymimidBook.ipynb)
+
+The [src/PymimidBook.ipynb](https://github.com/vrthra/mimid/blob/master/src/PymimidBook.ipynb)
+notebook also contains all the Python experiments. It can be viewed through
+either using the virtual box as explained below, or can be directly viewed using
+any of the Jupyter notebook viewers including VSCode, or Github ([from this link](https://github.com/vrthra/mimid/blob/master/src/PymimidBook.ipynb))
+(This is a [Jupyter notebook](https://jupyter.org) hosted at Github. Click to view an non-interactive version. If the load fails, click reload until you can view it).
 
 ## Prerequisites
 
 ### RAM
 
-All experiments done on a base system with 15 GB RAM.
+All experiments done on a base system with **15 GB RAM**, and the VM was
+allocated **10 GB RAM**.
+
+### Setup
+
+First, please make sure that the port 8888 is not in use. Our VM forwards its
+local port 8888 to the host machine.
+
+#### Download
+
+Next, please download the vagrant box from the following link:
+
+https://drive.google.com/open?id=1-v4v6Sz4IB-xpF9tmz1TaqMUPkP-2Fs7
+
+Unfortunately, due to the way google drive works, you need to navigate to that
+link using the browser and click on the file. There is no fail-safe command-line.
+
+This produces a file called `mimid.box` which is 3 GB in size, and should have
+the following _md5_ checksum.
+
+```
+$ md5sum mimid.box 
+f0999bdd1649d48ea8140c976da82404  mimid.box
+```
+
+
 
 ### Software
 
 **IMPORTANT** All executables are compiled and linked in the following vagrant
-box, with 8 GB RAM allocated. While it can be done on the base system itself,
-it is recommended that the user simply use the vagrant box directly. See the
-`Vagrantfile` for configuration.
+box, with 10 GB RAM allocated.
 
 ```bash
 $ vagrant up --provision
