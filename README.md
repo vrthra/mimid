@@ -121,17 +121,17 @@ mimid  start_c_tests.sh  startjupyter.sh  start_py_tests.sh  taints  toolchains
 The following are the important files
 
 | File/Directory      | Description |
--------------------------------
-| startjupyter.sh              | The script to start Jupyter notebook to view examples.
-| start_py_tests.sh            | Start the _Python_ experiments.
-| start_c_tests.sh             | Start the _C_ experiments.
-| taints/                      | The module to instrument C files.
-| toolchains/                  | The original LLVM and Clang tool chain.
-| mimid/src/                   | The main _mimid_ algorithm implementation.
-| mimid/Cmimid                 | The modularized _mimid_ implementation (in Python) experiments in _C_.
-| mimid/src/PymimidBook.ipynb  | The detailed _mimid_ notebook which also contains experiments in _Python_
-| mimid/src/c_tables.py        | CLI for viewing the results from Python experiments.
-| mimid/src/py_tables.py       | CLI for viewing the results from C experiments.
+-------------------------------------
+| startjupyter.sh              | The script to start Jupyter notebook to view examples. |
+| start_py_tests.sh            | Start the _Python_ experiments. |
+| start_c_tests.sh             | Start the _C_ experiments. |
+| taints/                      | The module to instrument C files. |
+| toolchains/                  | The original LLVM and Clang tool chain. |
+| mimid/src/                   | The main _mimid_ algorithm implementation. |
+| mimid/Cmimid                 | The modularized _mimid_ implementation (in Python) experiments in _C_. |
+| mimid/src/PymimidBook.ipynb  | The detailed _mimid_ notebook which also contains experiments in _Python_. |
+| mimid/src/c_tables.py        | CLI for viewing the results from Python experiments. |
+| mimid/src/py_tables.py       | CLI for viewing the results from C experiments. |
 
 The most important file here is `mimid/src/PymimidBook.ipynb` which is the
 Jupyter notebook that contains the complete algorithm explained and worked out
