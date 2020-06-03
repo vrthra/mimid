@@ -12,12 +12,12 @@ machine below.
 We also note that if you are unable to download the vagrant box (It is 3 GB)
 You can also take a look at the complete worked out example of how to derive
 grammar for an example program at [src/PymimidBook.ipynb](https://github.com/vrthra/mimid/blob/master/src/PymimidBook.ipynb)
-
 The [src/PymimidBook.ipynb](https://github.com/vrthra/mimid/blob/master/src/PymimidBook.ipynb)
-notebook also contains all the Python experiments. It can be viewed through
-either using the virtual box as explained below, or can be directly viewed using
-any of the Jupyter notebook viewers including VSCode, or Github ([from this link](https://github.com/vrthra/mimid/blob/master/src/PymimidBook.ipynb))
-(This is a [Jupyter notebook](https://jupyter.org) hosted at Github. Click to view an non-interactive version. If the load fails, click reload until you can view it).
+notebook also contains all the Python experiments in the paper. It can be
+viewed either by using the virtual box as explained below, or can be directly
+viewed using any of the Jupyter notebook viewers such as VSCode. A
+non-interactive version hosted at Github is accessible [from this link](https://github.com/vrthra/mimid/blob/master/src/PymimidBook.ipynb)
+(If the load fails, click reload until you can view it).
 
 ## Prerequisites
 
