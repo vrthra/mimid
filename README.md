@@ -11,7 +11,7 @@ machine below.
 
 We also note that if you are unable to download the vagrant box (It is 3 GB)
 You can also take a look at the complete worked out example of how to derive
-grammar for an example program at [src/PymimidBook.ipynb](https://github.com/vrthra/mimid/blob/master/src/PymimidBook.ipynb)
+grammar for an example program at [src/PymimidBook.ipynb](https://github.com/vrthra/mimid/blob/master/src/PymimidBook.ipynb).
 The [src/PymimidBook.ipynb](https://github.com/vrthra/mimid/blob/master/src/PymimidBook.ipynb)
 notebook also contains all the Python experiments in the paper. It can be
 viewed either by using the virtual box as explained below, or can be directly
@@ -38,17 +38,22 @@ Next, please download the vagrant box from the following link:
 https://drive.google.com/open?id=1-v4v6Sz4IB-xpF9tmz1TaqMUPkP-2Fs7
 
 Unfortunately, due to the way google drive works, you need to navigate to that
-link using the browser and click on the file. There is no fail-safe command-line.
+link using the browser and click on the file to download it. There is no
+fail-safe command-line for downloading.
 
-This produces a file called `mimid.box` which is 3 GB in size, and should have
-the following _md5_ checksum. (The commands in the host system are indicated by
-leading `$` and the other lines indicate the expected output).
+This produces a file called `mimid.box` which is 2.6 GB in size
+(the commands in the host system are indicated by
+leading `$` and the other lines indicate the expected output),
 
 ```bash
 $ du -ksh mimid.box
 2.6G  mimid.box
+```
 
-$ md5sum mimid.box 
+and should have the following _md5_ checksum.
+
+```bash
+$ md5sum mimid.box
 2bd3966d24ea01c9cbea44d2797c20b3  mimid.box
 ```
 
@@ -59,7 +64,7 @@ The vagrant box can be imported as follows:
 ```bash
 $ vagrant box add mimid ./mimid.box
 ==> box: Box file was not detected as metadata. Adding it directly...
-==> box: Adding box 'mimid' (v0) for provider: 
+==> box: Adding box 'mimid' (v0) for provider:
     box: Unpacking necessary files from: file:///path/to/mimid/mimid.box
 ==> box: Successfully added box 'mimid' (v0) for 'virtualbox'!
 
@@ -96,9 +101,9 @@ Bringing machine 'default' up with 'virtualbox' provider...
 
 #### Verify Box Import
 
-The commands inside the guest system are indicated by a `vm$ ` prefix. Any
-time `vm$` is used, it means to either ssh into the vagrant box as below, or if
-you are already in the VM, use the shell inside VM.
+The commands inside the guest system are indicated by a `vm$ ` prefix.
+Anytime `vm$` is used, it means to either ssh into the vagrant box as below, or
+if you are already in the VM, use the shell inside VM.
 
 ```bash
 $ vagrant ssh
@@ -512,7 +517,7 @@ int main(int argc, char *argv[]) {
 
 Place the program under `examples/`. Further, provide the sample inputs to your
 program as `ex.input.1`, `ex.input.2` etc. under the same directory (please
-follow the `*.input.<n>` naming convention. It is required for the `make`). 
+follow the `*.input.<n>` naming convention. It is required for the `make`).
 
 E.g:
 
