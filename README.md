@@ -393,3 +393,85 @@ pc_grammar = accio_grammar('pcex.py', VARS['pcex_src'], pcex_samples)
 where the variable `pc_grammar` holds the grammar mined.
 
 ### Adding a new C program
+
+First, move into `/home/vagrant/mimid/Cmimid/`. This is the base directory for
+C examples.
+
+```bash
+vm$ cd ~/mimid/Cmimid
+```
+
+To add a new C program, we assume that the program you have is a single C file,
+called `ex.c`. The `ex.c` is assumed to read inputs both from `stdin` as well as
+as an argument to the program. Assuming that your parser entry point is
+a function `parse_ex(char* input, char* result)`, copy and paste the following into your
+program. (The second parameter `result` is only an example, and is not needed.
+All you need is some means to return the parse failure or success).
+
+```C
+void strip_input(char *my_string) {
+  int read = strlen(my_string);
+  if (my_string[read - 1] == '\n') {
+    my_string[read - 1] = '\0';
+  }
+}
+
+int main(int argc, char *argv[]) {
+  char my_string[10240];
+  char result[10240];
+  init_hex_values();
+  int ret = -1;
+  if (argc == 1) {
+    char *v = fgets(my_string, 10240, stdin);
+    if (!v) {
+      exit(1);
+    }
+    strip_input(my_string);
+  } else {
+    strcpy(my_string, argv[1]);
+    strip_input(my_string);
+  }
+  printf("val: <%s>\n", my_string);
+  ret = parse_ex(my_string, &result);
+  return ret;
+}
+```
+
+Place the program under `examples/`. Further, provide the sample inputs to your
+program as `ex.input.1`, `ex.input.2` etc. under the same directory (please
+follow the `*.input.<n>` naming convention. It is required for the `make`). 
+
+e.g:
+
+```bash
+vm$ ls examples/ex.*
+examples/ex.c examples/ex.input.1 examples/ex.input.2 examples/ex.input.3
+```
+
+Next, check whether your program has a lexer. If it has a lexer, then
+inspect the `Makefile`. Define a target `build/ex.events` similar
+to `build/tiny.events` (by using `ex` instead of `tiny` in that
+target). If it does not use a lexer, then the default `build/%.events`
+target will work without modification.
+
+Once this is done, one can mine the grammar and extract the grammar with 
+
+```bash
+vm$ make build/ex.grammar
+vm$ cat build/ex.grammar
+```
+
+The precision of the grammar can be extracted with:
+
+```bash
+vm$ make build/ex.precision
+vm$ cat build/ex.precision
+```
+
+Similarly, the recall can be extracted with:
+
+```bash
+vm$ make build/ex.fuzz
+vm$ cat build/ex.fuzz
+```
+
