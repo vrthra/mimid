@@ -471,10 +471,13 @@ C examples.
 vm$ cd ~/mimid/Cmimid
 ```
 
-To add a new C program, we assume that the program you have is a single C file,
+To add a new C program, we assume that the program you have is a single C file
 called `ex.c`. The `ex.c` is assumed to read inputs both from `stdin` as well as
-as an argument to the program. Assuming that your parser entry point is
-a function `parse_ex(char* input, char* result)`, copy and paste the following into your
+as an argument to the program, which is then processed by the parsing function
+in your program.
+
+Assuming that your parser entry point is a function
+`parse_ex(char* input, char* result)`, copy and paste the following into your
 program. (The second parameter `result` is only an example, and is not needed.
 All you need is some means to return the parse failure or success).
 
@@ -511,20 +514,36 @@ Place the program under `examples/`. Further, provide the sample inputs to your
 program as `ex.input.1`, `ex.input.2` etc. under the same directory (please
 follow the `*.input.<n>` naming convention. It is required for the `make`). 
 
-e.g:
+E.g:
 
 ```bash
 vm$ ls examples/ex.*
 examples/ex.c examples/ex.input.1 examples/ex.input.2 examples/ex.input.3
 ```
 
-Next, check whether your program has a lexer. If it has a lexer, then
-inspect the `Makefile`. Define a target `build/ex.events` similar
-to `build/tiny.events` (by using `ex` instead of `tiny` in that
-target). If it does not use a lexer, then the default `build/%.events`
+Next, check whether your program has a lexer or a tokenizer. A lexer
+reads the input, and splits it into predefined tokens before it is passed
+into the program. For an example of a program that uses a lexer,
+see `examples/mjs.c` where the lexer is `static int pnext(struct pstate *p)`. For
+an example of a program that does not use a lexer, see `examples/cgi_decode.c`
+where each character is processed directly by the parser.
+
+If it has a lexer, then edit the `Makefile`, and define a target
+`build/ex.events` as below. Note that the `Makefile` syntax requires a
+`tab` i.e. (`\t`) before the recipe.
+
+
+```
+build/ex.events: build/ex.json.done
+  $(PYTHON) ./src/tokenevents.py build/ex/ > $@_
+  mv $@_ $@
+```
+
+If it does not use a lexer, then the default `build/%.events`
 target will work without modification.
 
-Once this is done, one can mine the grammar and extract the grammar with 
+Once this is done, one can mine the grammar and extract the grammar with the
+following commands:
 
 ```bash
 vm$ make build/ex.grammar
