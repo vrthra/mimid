@@ -173,11 +173,111 @@ We explain the _Python_ part first.
 
 ### Python experiments
 
+**IMPORTANT** The system is **very memory intensive**. Hence, do not run the
+experiments in parallel (e.g. concurrently from a different shell). If you
+do that, you might get a _memory error_.
+
+The following are the Python programs
+
+| Program         | Input Language Kind | Description |
+-------------------------------------------------
+| `calc.py`       | Context Free        | A simple calculator program.             |
+| `mathexpr.py`   | Context Free        | A more complex math expression program which supports functions. |
+| `cgidecode.py`  | Regular             | A program to decode CGI encoded strings. |
+| `urlparse.py`   | Regular             | A program to parse URLs.                 |
+| `microjson.py`  | Context Free        | A program to parse JSON strings.         |
+| `parseclisp.py` | Context Free        | A program to parse s-expressions.        |
+
+
+There are two main ways to run the Python experiments. Either through the
+Jupyter notebook as we explained earlier, or if you are on a headless system,
+using the command line, which is explained below.
+
+To start the Python experiments, execute the shell command below:
+
+```bash
+vm$ ./start_py_tests.sh
+```
+
+This will execute the Python experiments embedded in the Jupyter notebook
+without requiring a browser, and produce an HTML file `PymimidBook.html`
+in the `/home/vagrant` folder which may be viewed offline.
+
+#### Result analysis for Python (CLI)
+
+After running the python experiments using *command line*, the results can be
+inspected using the following command line. Note that running it through
+Jupyter notebook interface will not produce the `PymimidBook.html` file which
+is required for using `py_tables.py`. In that case, please view the results
+directly in the notebook `Results` section.
+
+```bash
+vm$ python3 ./mimid/src/py_tables.py
+Precision (Table 1)     Mimid
+-----------------
+calc.py
+mathexpr.py
+cgidecode.py
+urlparse.py
+microjson.py
+parseclisp.py
+
+Recall (Table 2)        Mimid
+-----------------
+calc.py
+mathexpr.py
+cgidecode.py
+urlparse.py
+microjson.py
+parseclisp.py
+```
+
 ### C experiments
 
-## Result analysis
+The C experiments are not accessible from the Jupyter notebook as it requires
+instrumenting the C programs. Further, the set of C programs is intended as
+a demonstration of how to use the _mimid_ algorithm in a standalone fashion.
 
-TODO
+The C experiments are in the directory `mimid/Cmimid`, and the modularized
+_mimid_ implementation (in Python) is available under `mimid/Cmimid/src`.
+
+To start the C experiments, execute the shell command below:
+
+```bash
+vm$ ./start_c_tests.sh
+```
+
+This will execute all the C experiments, and produce results which can be
+analyzed as below:
+
+#### Result analysis for C
+
+Note that for `C` there is not `Autogram` implementation available, and hence,
+we have nothing to compare against. Hence, the precision and recall is provided
+as is. The following command line produces the results (table names are in
+correspondence with the paper).
+
+```bash
+vm$ python3 ./mimid/src/c_tables.py
+Precision (Table 1)     Mimid
+-----------------
+mjs     97.5%
+tiny    92.8%
+json    83.8%
+
+Recall (Table 2)        Mimid
+-----------------
+mjs     90.5%
+json    100.0%
+tiny    100.0%
+```
+
+As before, what this means is that the grammar inferred by `mimid` for `mjs`
+(for example) can generate inputs such that 97.5% of such inputs were
+accepted by `mjs` (Table 1). Similarly, if one generates valid Javascript
+strings, then 90.5% of such inputs would be parsed correctly by a parser
+that uses the grammar mined by `mimid` from `mjs` (Table 2).
+
 ## How is the algorithm organized
 
 The Jupyter notebook provided has one to one correspondence with the
