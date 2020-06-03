@@ -220,7 +220,7 @@ in the `/home/vagrant` folder which may be viewed offline.
 After running the python experiments using *command line*, the results can be
 inspected using the following command line. Note that running it through
 Jupyter notebook interface will not produce the `PymimidBook.html` file which
-is required for using `py_tables.py`. In that case, please view the results
+is required for using `py_tables.sh`. In that case, please view the results
 directly in the notebook *Results* section.
 
 ```bash
