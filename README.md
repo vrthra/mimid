@@ -180,7 +180,7 @@ do that, you might get a _memory error_.
 The following are the Python programs
 
 | Program         | Input Language Kind | Description |
--------------------------------------------------
+|-----------------|---------------------|-------------|
 | `calc.py`       | Context Free        | A simple calculator program.             |
 | `mathexpr.py`   | Context Free        | A more complex math expression program which supports functions. |
 | `cgidecode.py`  | Regular             | A program to decode CGI encoded strings. |
