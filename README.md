@@ -41,100 +41,139 @@ Unfortunately, due to the way google drive works, you need to navigate to that
 link using the browser and click on the file. There is no fail-safe command-line.
 
 This produces a file called `mimid.box` which is 3 GB in size, and should have
-the following _md5_ checksum.
+the following _md5_ checksum. (The commands in the host system are indicated by
+leading `$` and the other lines indicate the expected output).
 
-```
+```bash
+$ du -ksh mimid.box
+2.6G  mimid.box
+
 $ md5sum mimid.box 
 f0999bdd1649d48ea8140c976da82404  mimid.box
 ```
 
+#### Importing the box
 
-
-### Software
-
-**IMPORTANT** All executables are compiled and linked in the following vagrant
-box, with 10 GB RAM allocated.
+The vagrant box can be imported as follows:
 
 ```bash
-$ vagrant up --provision
+$ vagrant box add mimid ./mimid.box
+==> box: Box file was not detected as metadata. Adding it directly...
+==> box: Adding box 'mimid' (v0) for provider: 
+    box: Unpacking necessary files from: file:///path/to/mimid/mimid.box
+==> box: Successfully added box 'mimid' (v0) for 'virtualbox'!
+
+$ vagrant init mimid
+A `Vagrantfile` has been placed in this directory. You are now
+ready to `vagrant up` your first virtual environment! Please read
+the comments in the Vagrantfile as well as documentation on
+`vagrantup.com` for more information on using Vagrant.
+
+$ vagrant up
+
+Bringing machine 'default' up with 'virtualbox' provider...
+==> default: Importing base box 'mimid'...
+==> default: Matching MAC address for NAT networking...
+==> default: Setting the name of the VM: vtest_default_1591177746029_82328
+==> default: Fixed port collision for 22 => 2222. Now on port 2200.
+==> default: Clearing any previously set network interfaces...
+==> default: Preparing network interfaces based on configuration...
+    default: Adapter 1: nat
+==> default: Forwarding ports...
+    default: 8888 (guest) => 8888 (host) (adapter 1)
+    default: 22 (guest) => 2200 (host) (adapter 1)
+==> default: Running 'pre-boot' VM customizations...
+==> default: Booting VM...
+==> default: Waiting for machine to boot. This may take a few minutes...
+    default: SSH address: 127.0.0.1:2200
+    default: SSH username: vagrant
+    default: SSH auth method: private key
+==> default: Machine booted and ready!
+==> default: Checking for guest additions in VM...
+==> default: Mounting shared folders...
+    default: /vagrant => /path/to/mimid
 ```
 
-To connect
+#### Verify Box Import
 
-```
+The commands inside the guest system are indicated by a `vm$ ` prefix. Any
+time `vm$` is used, it means to either ssh into the vagrant box as below, or if
+you are already in the VM, use the shell inside VM.
+
+```bash
 $ vagrant ssh
+
+vm$ free -g
+              total        used        free      shared  buff/cache   available
+Mem:              9           0           9           0           0           9
+Swap:             1           0           1
 ```
 
-The vagrant box had the following operating system.
+## A complete example
 
 ```bash
-$ uname -rvmpio
-4.15.0-70-generic #79-Ubuntu SMP Tue Nov 12 10:36:11 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
-
-$ lsb_release -d
-Description:	Ubuntu 18.04.3 LTS
+vm$ pwd
+/home/vagrant
+vm$ ls
+mimid  start_c_tests.sh  startjupyter.sh  start_py_tests.sh  taints  toolchains
 ```
 
-#### Python
+The following are the important files
 
-The algorithm implementation was evaluated using Python version 3.6.8
+| File/Directory      | Description |
+-------------------------------
+| startjupyter.sh              | The script to start Jupyter notebook to view examples.
+| start_py_tests.sh            | Start the _Python_ experiments.
+| start_c_tests.sh             | Start the _C_ experiments.
+| taints/                      | The module to instrument C files.
+| toolchains/                  | The original LLVM and Clang tool chain.
+| mimid/src/                   | The main _mimid_ algorithm implementation.
+| mimid/Cmimid                 | The modularized _mimid_ implementation (in Python) experiments in _C_.
+| mimid/src/PymimidBook.ipynb  | The detailed _mimid_ notebook which also contains experiments in _Python_
+| mimid/src/c_tables.py        | CLI for viewing the results from Python experiments.
+| mimid/src/py_tables.py       | CLI for viewing the results from C experiments.
+
+The most important file here is `mimid/src/PymimidBook.ipynb` which is the
+Jupyter notebook that contains the complete algorithm explained and worked out
+over two examples: one simple, and the other more complex. It can be
+interactively explored using any of the Jupyter notebook viewers including
+VSCode or directly using a browser as explained below.
+
+It can also be viewed (read only) directly using the github link [here](https://github.com/vrthra/mimid/blob/master/src/PymimidBook.ipynb)
+
+### Viewing the Jupyter notebook
+
+From within your VM shell, do the following:
 
 ```bash
-$ python3 --version
-Python 3.6.8
-```
-
-## Viewing the Jupyter notebook
-
-To view the Jupyter notebook, connect to the vagrant image
-
-```
-$ vagrant ssh
-```
-
-and inside the virtual machine, execute this command
-
-```
 vm$ ./startjupyter.sh
 ...
-     or http://127.0.0.1:8888/?token=b7c576c237db3c7aec4e9ac30b69ef1ed6a4fb32b623c93a
+     or http://127.0.0.1:8888/?token=ba5e5c480fe4a03d56c358b4a10d7172d2b19ff4537be55e
 ```
 
-Copy and paste the last line in your host browser. The port `8888` is forwarded
-to the host. Click the [src](http://127.0.0.1:8888/tree/src) link, and within
-that folder, click the [PymimidBook.ipynb](http://127.0.0.1:8888/notebooks/src/PymimidBook.ipynb)
-link. This will let you see the complete example already executed. You can
-restart execution by clicking on Kernel>Restart&Run All or simply clear output
-and run one box at a time.
+Copy and paste the last line in the host browser. The port `8888` is forwarded
+to the host. Click the [src](http://127.0.0.1:8888/tree/src) link from the
+browser and within that folder, click the [PymimidBook.ipynb](http://127.0.0.1:8888/notebooks/src/PymimidBook.ipynb)
+link. This will let you see the complete set of examples as well as the
+Python experiments in an already executed form.
 
-## Experiments
+You can either interactively explore the notebook by first clearing the
+current values `Kernel>Restart & Clear Output` and executing each cell
+one at a time, or by running all the experiments at once by
+`Kernel>Restart & Run All`. Other options are also available from menu.
 
-First login to the virtual machine
 
-```bash
-$ vagrant ssh
-```
+## Starting the experiments
 
-Next, change directory to `mimid`
+There are two sets of experiments: The Python experiments
+(`calc.py`, `mathexpr.py`, `cgidecode.py`, `urlparse.py`, `microjson.py`, `parseclisp.py`)
+and the C experiments
+(`json.c`, `tiny.c`, `mjs.c`).
+We explain the _Python_ part first.
 
-```bash
-vm$ cd mimid
-vm$ pwd
-/home/vagrant/mimid
-```
+### Python experiments
 
-### Starting the experiments
-
-The experiments can be started with the following command:
-
-```bash
-$ make all
-```
-
-The above command executes _all_ experiments. If needed, individual
-experiments can be done with:
-
-TODO
+### C experiments
 
 ## Result analysis
 
