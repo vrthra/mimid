@@ -44,12 +44,18 @@ Vagrant.configure("2") do |config|
     echo cd /home/vagrant/mimid >  /home/vagrant/start_py_tests.sh
     echo jupyter nbconvert --to notebook --execute src/PymimidBook.ipynb --ExecutePreprocessor.timeout=36000 --output=PymimidBook_.ipynb >>  /home/vagrant/start_py_tests.sh
     echo jupyter nbconvert --to html src/PymimidBook_.ipynb --output=~/PymimidBook.html >>  /home/vagrant/start_py_tests.sh
-    echo python3 src/py_tables.py >>  /home/vagrant/start_py_tests.sh
     chmod +x /home/vagrant/start_py_tests.sh
+
+    echo cd /home/vagrant/mimid >  /home/vagrant/py_tables.sh
+    echo python3 src/py_tables.py >>  /home/vagrant/py_tables.sh
+    chmod +x /home/vagrant/py_tables.sh
 
     echo cd /home/vagrant/mimid/Cmimid >  /home/vagrant/start_c_tests.sh
     echo make precision fuzz >>  /home/vagrant/start_c_tests.sh
-    echo python3 src/c_tables.py >>  /home/vagrant/start_c_tests.sh
     chmod +x /home/vagrant/start_c_tests.sh
+
+    echo cd /home/vagrant/mimid >  /home/vagrant/c_tables.sh
+    echo python3 src/c_tables.py >>  /home/vagrant/c_tables.sh
+    chmod +x /home/vagrant/c_tables.sh
   SHELL
 end
