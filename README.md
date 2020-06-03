@@ -209,7 +209,7 @@ After running the python experiments using *command line*, the results can be
 inspected using the following command line. Note that running it through
 Jupyter notebook interface will not produce the `PymimidBook.html` file which
 is required for using `py_tables.py`. In that case, please view the results
-directly in the notebook `Results` section.
+directly in the notebook *Results* section.
 
 ```bash
 vm$ python3 ./mimid/src/py_tables.py
@@ -274,7 +274,7 @@ tiny    100.0%
 
 As before, what this means is that the grammar inferred by `mimid` for `mjs`
 (for example) can generate inputs such that 97.5% of such inputs were
-accepted by `mjs` (Table 1). Similarly, if one generates valid Javascript
+accepted by `mjs` (Table 1). Similarly, if one generates valid `Javascript`
 strings, then 90.5% of such inputs would be parsed correctly by a parser
 that uses the grammar mined by `mimid` from `mjs` (Table 2).
 
@@ -284,10 +284,112 @@ The Jupyter notebook provided has one to one correspondence with the
 procedure names in the paper. Each method is thoroughly documented,
 and executions of methods can be performed to verify their behavior.
 
-## How to interpret the results
-
-TODO
-
 ## How to add a new subject
 
-TODO
+### Adding a new Python program
+
+To add a new Python program, one needs to know what kind of a parer
+it has. That is, if it is the traditional recursive descent, or a
+parser combinator implementation. Both are discussed below.
+
+#### Adding a traditional recursive descent Python program
+
+**IMPORTANT:** We assume that you have the program as well as the sample inputs.
+Both are required for grammar mining. In particular, we can only mine the
+features that are exercised by the given set of samples.
+
+Ensure that the program has no external calls during parsing such as `shlex`
+or other lexers. For ease of explanation, we assume that you have a single
+source file program called `ex.py`. Copy and paste the contents of
+`ex.py` in the Jupyter notebook in a Jupyter cell in the
+*Our subject programs* section with the following format:
+
+```
+%%var ex_src
+# [(
+...
+# )]
+```
+
+where the ellipsis (...) is replaced by the contents of the file `ex.py`.
+
+Next, register it in `program_src` variable as below:
+
+```python
+program_src = {
+  ...
+  'ex.py': VARS['ex_src'],
+}
+```
+
+Execute all the modified cells so that the variables are correctly populated.
+
+Also, make sure to execute the following fragment in _Generate Transformed Sources_ section
+
+```python
+# [(
+for file_name in program_src:
+    print(file_name)
+    with open("subjects/%s" % file_name, 'wb+') as f:
+        f.write(program_src[file_name].encode('utf-8'))
+    with open("build/%s" % file_name, 'w+') as f:
+        f.write(rewrite(program_src[file_name], file_name))
+# )]
+```
+
+which will produce the original file `mimid/src/subjects/ex.py` and the
+instrumented file `mimid/src/build/ex.py`.)
+
+Next, fill in the sample inputs in an array as follows (preferably under
+the _Evaluation/Subjects/_ section under an *Ex* heading):
+
+```python
+ex_samples = [ . . . ]
+```
+Again, fill in the ellipsis with the correct values.
+
+
+Now, grammar mining is as simple as executing the following command
+
+```python
+ex_grammar = accio_grammar('ex.py', VARS['ex_src'], ex_samples, cache=False)
+```
+
+The `ex_grammar` variable will hold the mined grammar. If there are any errors,
+restart and re-execute the Jupyter notebook completely (with the added example).
+This will clear away any interfering global state, and execute the example
+correctly.
+
+#### Adding a parser combinator example
+
+Adding a new parser combinator is more involved as it requires modification
+of the library. In particular, we expect the defined parsers to have a `.tag`
+member variable which provides the name. Hence, one can either reuse the
+existing parser combinator library in section _The parsec library_, or
+use your own combinator library with the `tag` information as given
+in `myparsec_src` for each defined parsers at the end.
+
+Since adding a new parser combinator library is fairly complex, and may require
+additional customization of the library, we do not explore that here. Instead
+we assume that you use the parser combinator library given in the Jupyter
+notebook itself.
+
+To make the addition simple, please add your example program under
+the _A parsec lisp parser_ section, by adding the program `pcex` in the end
+under a new cell, and use `%%var pcex_src` line as the first line in that cell
+with your parser combinator definitions. Make sure to provide the `.tag` string
+to each named parser. This is required as the Python introspection does not
+allow us to extract the name of the variable being defined easily.
+
+Next, provide your own samples in the variable `pcex_samples` as we showed
+earlier.
+
+Finally, the grammar can be extracted as
+
+```python
+pc_grammar = accio_grammar('pcex.py', VARS['pcex_src'], pcex_samples)
+```
+
+where the variable `pc_grammar` holds the grammar mined.
+
+### Adding a new C program
