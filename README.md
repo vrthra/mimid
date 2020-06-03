@@ -120,8 +120,8 @@ mimid  start_c_tests.sh  startjupyter.sh  start_py_tests.sh  taints  toolchains
 
 The following are the important files
 
-| File/Directory      | Description |
--------------------------------------
+| File/Directory               | Description                                                                 |
+|------------------------------|-----------------------------------------------------------------------------|
 | startjupyter.sh              | The script to start Jupyter notebook to view examples. |
 | start_py_tests.sh            | Start the _Python_ experiments. |
 | start_c_tests.sh             | Start the _C_ experiments. |
