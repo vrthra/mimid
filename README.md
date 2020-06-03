@@ -245,13 +245,15 @@ microjson.py,   0.0%,   93.0%
 
 Here, we compare the results from *Autogram* to the results from *mimid*.
 What this means is that the grammar inferred by *mimid* for `microjson`
-(for example) can generate inputs such that 98.6% of such inputs were
-accepted by `microjson.py` when compared to the grammar inferred
-by *Autogram* that could only produce 47.5% valid inputs (Table 1).
-Similarly, if one generates valid *Javascript* strings, then 93.0% of such
-inputs would be parsed correctly by a parser that uses the grammar mined by
-*mimid* from `microjson` when compared to a parser using a grammar mined
-using *Autogram* from `microjson` which accepts 0.0% of the inputs (Table 2).
+(for example) when used with a grammar based random fuzzer, generated
+inputs such that 98.6% of such inputs were accepted by `microjson.py` when
+compared to the grammar inferred by *Autogram* that could only produce
+(using a grammar fuzzer) 47.5% valid inputs (Table 1).
+Similarly, when valid *Javascript* strings were randomly generated using
+a fuzzer and the golden grammar for Javascript, 93.0% of such inputs would be
+parsed correctly by a parser that uses the grammar mined by *mimid* from
+`microjson` when compared to a parser using a grammar mined using *Autogram*
+from `microjson` which accepts 0.0% of the inputs (Table 2).
 
 ### C experiments
 
@@ -302,10 +304,11 @@ tiny    100.0%
 ```
 
 As before, what this means is that the grammar inferred by *mimid* for `mjs`
-(for example) can generate inputs such that 97.5% of such inputs were
-accepted by `mjs` (Table 1). Similarly, if one generates valid *Javascript*
-strings, then 90.5% of such inputs would be parsed correctly by a parser
-that uses the grammar mined by *mimid* from `mjs` (Table 2).
+(for example), when used with a random grammar fuzzer, generated inputs such
+that 97.5% of such inputs were accepted by `mjs` (Table 1). Similarly, when
+valid *Javascript* strings were generated randomly using a golden grammar,
+90.5% of such inputs were parsed correctly by a parser that uses the grammar
+mined by *mimid* from `mjs` (Table 2).
 
 ## How is the algorithm organized
 
