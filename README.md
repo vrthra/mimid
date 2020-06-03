@@ -276,7 +276,7 @@ analyzed as below:
 
 #### Result analysis for C
 
-Note that for `C` there is not `Autogram` implementation available, and hence,
+Note that for `C` there is no *Autogram* implementation available, so
 we have nothing to compare against. Hence, the precision and recall is provided
 as is. The following command line produces the results (table names are in
 correspondence with the paper).
@@ -296,11 +296,11 @@ json    100.0%
 tiny    100.0%
 ```
 
-As before, what this means is that the grammar inferred by `mimid` for `mjs`
+As before, what this means is that the grammar inferred by *mimid* for `mjs`
 (for example) can generate inputs such that 97.5% of such inputs were
-accepted by `mjs` (Table 1). Similarly, if one generates valid `Javascript`
+accepted by `mjs` (Table 1). Similarly, if one generates valid *Javascript*
 strings, then 90.5% of such inputs would be parsed correctly by a parser
-that uses the grammar mined by `mimid` from `mjs` (Table 2).
+that uses the grammar mined by *mimid* from `mjs` (Table 2).
 
 ## How is the algorithm organized
 
@@ -322,11 +322,11 @@ parser combinator implementation. Both are discussed below.
 Both are required for grammar mining. In particular, we can only mine the
 features that are exercised by the given set of samples.
 
-Ensure that the program has no external calls during parsing such as `shlex`
+Ensure that the program has no external calls during parsing such as [shlex](https://docs.python.org/3/library/shlex.html)
 or other lexers. For ease of explanation, we assume that you have a single
 source file program called `ex.py`. Copy and paste the contents of
-`ex.py` in the Jupyter notebook in a Jupyter cell in the
-*Our subject programs* section with the following format:
+`ex.py` in the Jupyter notebook in a cell in the *Our subject programs* section
+with the following format:
 
 ```
 %%var ex_src
@@ -372,7 +372,6 @@ ex_samples = [ . . . ]
 ```
 Again, fill in the ellipsis with the correct values.
 
-
 Now, grammar mining is as simple as executing the following command
 
 ```python
@@ -387,11 +386,34 @@ correctly.
 #### Adding a parser combinator example
 
 Adding a new parser combinator is more involved as it requires modification
-of the library. In particular, we expect the defined parsers to have a `.tag`
-member variable which provides the name. Hence, one can either reuse the
-existing parser combinator library in section _The parsec library_, or
-use your own combinator library with the `tag` information as given
-in `myparsec_src` for each defined parsers at the end.
+of the library. In particular, there is no information to be gathered from
+the method names as they are generic names such as `curried` and `parse`.
+The actual readable names are provided as the variable names of parser objects.
+
+E.g. the actual readable information is present in the variable name `digit`
+rather than the method name `any_of` in the below example.
+
+```python
+digit = any_of(string.digits)
+```
+
+Unfortunately, Python provides no easy way for us to recover the name of the
+variable that holds an object from within the object. Hence, we require that
+each object that contains a recognizable parser such as `digit` also defines
+a `.tag` member variable which provides the name associated as a string.
+
+(While it can be technically done using an AST rewrite automatically, or there
+might be other clever ways of recovering the variable name, we have not done
+that at this point.)
+
+```python
+digit = any_of(string.digits)
+digit.tag = 'digit'
+```
+
+Hence, one can either reuse the existing parser combinator library in section
+_The parsec library_, or use your own combinator library with the `tag`
+information for each parser object as given above.
 
 Since adding a new parser combinator library is fairly complex, and may require
 additional customization of the library, we do not explore that here. Instead
@@ -400,10 +422,34 @@ notebook itself.
 
 To make the addition simple, please add your example program under
 the _A parsec lisp parser_ section, by adding the program `pcex` in the end
-under a new cell, and use `%%var pcex_src` line as the first line in that cell
+under a new cell. Use `%%var pcex_src` line as the first line in that cell
 with your parser combinator definitions. Make sure to provide the `.tag` string
-to each named parser. This is required as the Python introspection does not
-allow us to extract the name of the variable being defined easily.
+to each named parser. Finally, make sure that you define a `main` function
+that takes in the string to be parsed as an argument.
+
+E.g.
+
+```python
+%%var pcex_src
+import string
+import json
+import sys
+import myparsec as pyparsec
+
+ap = pyparsec.char('a')
+ap.tag = 'a'
+bp = pyparsec.char('b')
+bp.tag = 'b'
+
+abparser = ap >> bp
+abparser.tag = 'abparser'
+
+def main(arg):
+    v = abparser.parse(arg)
+    if isinstance(v, pyparsec.Left):
+        raise Exception('parse failed')
+    return v
+```
 
 Next, provide your own samples in the variable `pcex_samples` as we showed
 earlier.
