@@ -44,8 +44,15 @@ def enhance_grammar(g):
         else:
             g_[nk] = [[k] for k in F.ASCII_MAP[token]]
     return g_
-
+def usage():
+    print('''
+parsinggrammar.py <json grammar>
+    Given a grammar in ebnf format, convert it to the fuzzingbook
+    canonical grammar format
+            ''')
+    sys.exit(0)
 def main(args):
+    if not args or args[0] == '-h': usage()
     gfname = args[0]
     with open(gfname) as f:
         gf = json.load(fp=f)

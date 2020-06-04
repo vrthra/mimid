@@ -254,7 +254,26 @@ def remove_duplicate_repetitions(g):
         new_g[k] = new_rules
     return new_g
 
+def usage():
+    print('''
+generalizetokens.py <grammar file>
+    Given a mined grammar, which contains multiple chars digits etc as
+    alternatives widen them to character classes. The
+    character classes are then widened to their parents (seen below)
+    until one of the checks in MAX_CHECKS fail.
+
+    [__WHITESPACE__]        => [__ASCII_PRINTABLE__]
+    [__DIGIT__]             => [__ASCII_ALPHANUM__]
+    [__ASCII_LOWER__]       => [__ASCII_LETTER__]
+    [__ASCII_UPPER__]       => [__ASCII_LETTER__]
+    [__ASCII_LETTER__]      => [__ASCII_ALPHANUM__]
+    [__ASCII_ALPHANUM__]    => [__ASCII_PRINTABLE__]
+    [__PUNCT__]             => [__ASCII_PRINTABLE__]
+            ''')
+    sys.exit(0)
+
 def main(args):
+    if not args or args[0] == '-h': usage()
     gfname = args[0]
     with open(gfname) as f:
         gf = json.load(fp=f)

@@ -4,7 +4,15 @@ import util
 import json
 import fuzzingbook.Parser as P
 
+def usage():
+    print('''
+parser.py <grammar> <input>
+    An interface to the fuzzingbook parser. Returns if the given string can be parsed by the grammar.
+            ''')
+    sys.exit(0)
+
 def main(args):
+    if not args or args[0] == '-h': usage()
     with open(args[0]) as f:
         mined = json.load(f)
     with open(args[1], mode='r+b') as f:

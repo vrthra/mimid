@@ -232,8 +232,17 @@ def tree_to_pstr(tree, op_='', _cl=''):
         # need this if the terminal symbols are more than one char wide.
         return "%s%s%s" % (op_, symbol, _cl)
 
+def usage():
+    print('''
+treeminer.py <cmimid tracefile>
+    From the <cmimid tracefile> provided, recover the parse tree.
+    Output is the parse tree in JSON format.
+    ''')
+    sys.exit(0)
 import os
-def main(tracefile):
+def main(args):
+    if not args or args[0] == '-h': usage()
+    tracefile = args[0]
     with open(tracefile) as f:
         my_trace = json.load(f)
     mined_trees = miner(my_trace)
@@ -246,4 +255,4 @@ def main(tracefile):
         print(json.dumps(mined_trees, indent=4))
 
 if __name__ == '__main__':
-    main(sys.argv[1])
+    main(sys.argv[1:])

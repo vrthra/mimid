@@ -114,7 +114,16 @@ def check_key(g, gk, start, command):
             print("Exhausted limit for key:%s" % gk, file=sys.stderr)
             return
 
-def main(tracefile):
+def usage():
+    print('''
+grammar-miner.py <generalized parse trees>
+    Given a set of generalized parse trees, mine the grammar
+            ''')
+    sys.exit(0)
+
+def main(args):
+    if not args or args[0] == '-h': usage()
+    tracefile = args[0]
     with open(tracefile) as f:
         generalized_trees  = json.load(f)
     ret, g = convert_to_grammar(generalized_trees)
@@ -145,5 +154,5 @@ def main(tracefile):
     print(json.dumps({'[start]': start_symbol, '[grammar]':g, '[command]':cmd}, indent=4))
 
 if __name__ == '__main__':
-    main(sys.argv[1])
+    main(sys.argv[1:])
 

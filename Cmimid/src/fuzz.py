@@ -118,9 +118,18 @@ class LimitFuzzer(Fuzzer):
                 assert len([v for v in cost[k] if v != float('inf')]) > 0
         return cost
 
+def usage():
+    print('''
+fuzz.py <inferred json grammar> <uninstrumented-exec> <count>
+    Use the provided inferred grammar to generate inputs, and validate them against the given executable.
+    The output is in <uninstrumented-exec>.fuzz file.
+    The <count> is the number of times to generate inputs.
+    ''')
+    sys.exit(0)
 
 import subprocess
 def main(args):
+    if not args or args[0] == '-h': usage()
     errors = []
     with open(args[0]) as f:
         s = json.load(f)

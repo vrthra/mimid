@@ -170,17 +170,29 @@ def tree_to_str(node):
         return name
     return ''.join(tree_to_str(c) for c in children)
 
-if __name__ == '__main__':
-    import sys
+def usage():
+    print('''
+ftree.py <json file> <tree numbers>*
+    Display the selected trees from <json file>
+    if <tree numbers> is empty, all trees are shown if not, only selected trees are shown
+    ''')
+    sys.exit(0)
+
+def main(args):
+    if not args or args[0] == '-h': usage()
     import json
-    jsonfn = sys.argv[1]
+    jsonfn = args[0]
     with open(jsonfn) as f:
         jsont = json.load(f)
     if isinstance(jsont, dict):
         jsont = [jsont]
     trees = range(len(jsont))
-    if len(sys.argv) > 2:
-        trees = [int(v) for v in sys.argv[2:]]
+    if len(args) > 1:
+        trees = [int(v) for v in args[1:]]
     for tree in trees:
         print(jsont[tree]['arg'], repr(tree_to_str(jsont[tree]['tree'])))
         print_tree(jsont[tree]['tree'], format_node=hilight_leaf, get_children=lambda x: x[1])
+
+if __name__ == '__main__':
+    import sys
+    main(sys.argv[1:])

@@ -297,9 +297,20 @@ def process_events(events, inputstring):
     assert not cmimid_stack
     return fire_events(gen_events, inputstring)
 
+def usage():
+    print("""
+events.py <subject dir>
+    Extract the buffer accesses from traces.
+    <subject dir> The directory that corresponds to each subject.  Each input <subject>.input.<n>
+                  will have a <subject>.input.<n>.json file associated with it within the subject dir.
+    The output is a JSON string that has the pygmalion events converted to cmimid events with control
+    flow information associated with the comparisons.
+    """)
+    sys.exit(0)
 
-if __name__ == '__main__':
-    event_dir = sys.argv[1]
+def main(args)
+    if not args or args[0] == '-h': usage()
+    event_dir = args[0]
     returns = []
     lst = [event_dir]
     if os.path.isdir(event_dir):
@@ -316,3 +327,6 @@ if __name__ == '__main__':
         ret = process_events(events, inputstr)
         returns.append(ret)
     print(json.dumps(returns))
+
+if __name__ == '__main__':
+    main(sys.argv[1:])

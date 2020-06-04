@@ -78,11 +78,21 @@ def generalize_loop_trees(jtrees, log=False):
         update_original_pseudo_names(k)
     return my_trees
 
-def main(tracefile):
+def usage():
+    print('''
+generalizeloop.py <trees json>
+    Given the json file containing the extracted parse trees from the set of inputs
+    generalize the loop names using active labelling.
+    ''')
+    sys.exit(0)
+
+def main(args):
+    if not args or args[0] == '-h': usage()
+    tracefile = args[0]
     with open(tracefile) as f:
         mined_trees = json.load(f)
     util.init_log('generalize_loop', '', mined_trees[0]['original'])
     gmethod_trees = generalize_loop_trees(mined_trees)
     print(json.dumps(gmethod_trees, indent=4))
 
-main(sys.argv[1])
+main(sys.argv[1:])

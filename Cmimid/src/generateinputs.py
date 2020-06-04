@@ -7,8 +7,17 @@ import re
 import fuzz as F
 import fuzzingbook.Parser as P
 
+def usage():
+    print('''
+generateinputs.py  <grammar> <start> <command> <directory> <count>
+    Given a grammar, the starting nonterminal, and an uninstrumented executable to validate the inputs against,
+    generate <count> number of valid inputs and store them in <directory> in the format <command>.input.<n>
+            ''')
+    sys.exit(0)
+
 import subprocess
 def main(args):
+    if not args or args[0] == '-h': usage()
     errors = []
     with open(args[0]) as f:
         s = json.load(f)

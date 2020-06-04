@@ -12,7 +12,7 @@ import fuzzingbook.Parser as P
 
 def usage():
     print("""
-check_precision.py: <golden grammar> <inferred grammar> <non-instrumented executable> <working directory> <count attempts>
+check_precision.py <golden grammar> <inferred grammar> <non-instrumented executable> <working directory> <count attempts>
     Used for checking the precision of the provided grammar. We generate inputs
     using the golden grammar, identify the semantically valid ones using non
     instrumented executable, and run these valid inputs against a parser using
@@ -27,7 +27,7 @@ check_precision.py: <golden grammar> <inferred grammar> <non-instrumented execut
     sys.exit(0)
 
 def main(args):
-    if not args: usage()
+    if not args or args[0] == '-h': usage()
     errors = []
     with open(args[0]) as f:
         golden = json.load(f)

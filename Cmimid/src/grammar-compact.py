@@ -2,7 +2,15 @@ import sys
 import json
 import grammartools
 
+def usage():
+    print('''
+grammar-compact.py <grammar>
+    Given an inferred grammar, remove redundant rules and definitions
+            ''')
+    sys.exit(0)
+
 def main(args):
+    if not args or args[0] == '-h': usage()
     gfname = args[0]
     with open(gfname) as f:
         gf = json.load(fp=f)

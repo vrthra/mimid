@@ -559,7 +559,20 @@ def parse(arg):
            #skipped.append(to_string(i))
     display_till(len(SRC))
 
-store(sys.argv[1])
-parse(sys.argv[1])
+def usage():
+    print('''
+simplify.py <c file>
+    Given a C file, simplify all control statements. That is, all `for` becomes `while`,
+    and all `switch` become `if`, and `do while` is converted to an equivalent `while`.
+    This is in preparation for instrumentation.
+            ''')
+    sys.exit(0)
+
+def main(args):
+    if not args or args[0] == '-h': usage()
+    store(args[0])
+    parse(args[0])
 #for i in skipped:
 #    print(repr(i), file=sys.stderr)
+if __name__ == '__main__':
+    main(sys.argv[1:])

@@ -169,11 +169,21 @@ def generalize_method_trees(jtrees, log=False):
         update_original_method_names(k)
     return my_trees
 
-def main(tracefile):
+def usage():
+    print('''
+generalizemethod.py <trees json>
+        Given the json file containing the extracted parse trees from the set of inputs
+        generalize the method names using active labelling.
+            ''')
+    sys.exit(0)
+
+def main(args):
+    if not args or args[0] == '-h': usage()
+    tracefile = args[0]
     with open(tracefile) as f:
         mined_trees = json.load(f)
     gmethod_trees = generalize_method_trees(mined_trees)
     print(json.dumps(gmethod_trees, indent=4))
 
 if __name__ == '__main__':
-    main(sys.argv[1])
+    main(sys.argv[1:])
