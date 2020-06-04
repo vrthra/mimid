@@ -1,11 +1,12 @@
 # Replication package for _Mining Input Grammars From Dynamic Control Flow_
 
-**IMPORTANT** This package is hosted at Github [in this repository](https://github.com/vrthra/mimid).
+**IMPORTANT** This complete source code of this artifact is hosted
+[in this Github repository](https://github.com/vrthra/mimid).
 
 Our submission is a tool that implements the algorithm given in the paper
 _Mining Input Grammars From Dynamic Control Flow_.
-We provide the virtual machine [mimid](https://drive.google.com/open?id=1-v4v6Sz4IB-xpF9tmz1TaqMUPkP-2Fs7)
-(hosted on google drive) which contains the complete artifacts necessary to
+We provide the virtual machine [mimid](https://doi.org/10.5281/zenodo.3875529)
+which contains the complete artifacts necessary to
 reproduce our experiments. We describe the process of invoking the virtual
 machine below.
 
@@ -27,6 +28,19 @@ If you want to recreate the virtual box, simply execute `make box-create` in the
 $ make box-create
 ```
 
+## Overview
+
+This paper presents a novel general algorithm for mining the input grammar
+of a given program. Our algorithm _mimid_ takes a program and a small
+set of inputs, and automatically infers a readable (upto) context-free 
+grammar that captures the input language of the program. Our progarm
+relies only on having access to _access patterns_ in the initial input
+buffer from different locations in the parser. Our technique works on all
+stack based recursive descent input parsers including parser combinators,
+and works without program specific heursitics.
+
+We evaluate the grammars obtained by _mimid_ on a variety of subjects.
+
 ## Prerequisites
 
 ### RAM
@@ -43,11 +57,7 @@ local port 8888 to the host machine.
 
 Next, please download the vagrant box from the following link:
 
-https://drive.google.com/open?id=1-v4v6Sz4IB-xpF9tmz1TaqMUPkP-2Fs7
-
-Unfortunately, due to the way google drive works, you need to navigate to that
-link using the browser and click on the file to download it. There is no
-fail-safe command-line for downloading.
+https://doi.org/10.5281/zenodo.3875529
 
 This produces a file called `mimid.box` which is 2.6 GB in size
 (the commands in the host system are indicated by
@@ -320,11 +330,51 @@ mined by *mimid* from `mjs` (Table 2).
 
 ## How is the algorithm organized
 
-The Jupyter notebook provided has one to one correspondence with the
-procedure names in the paper. Each method is thoroughly documented,
+The Jupyter notebook provided has complete documentation of the entire
+algorithm. Each method is thoroughly documented,
 and executions of methods can be performed to verify their behavior.
+Use the Jupyter notebook 
+[src/PymimidBook.ipynb](https://github.com/vrthra/mimid/blob/master/src/PymimidBook.ipynb)
+as the main guide.
+
+The algorithm consists of the following parts. The part in the paper is given
+as a heading, and the corresponding parts in Jupyter notebook are noted below.
+
+### Paper: Section 3 _Tracking control flow and comparisons_
+
+1. Instrumenting the source code to track access and control flow.
+
+   Section 1.5 _Rewriting the source code_ in the Jupyter notebook.
+
+2. Running the inputs, and generating access traces.
+
+   Section 1.6 _Generating traces_ in the Jupyter notebook.
+
+### Paper: Section 4 _From traces to parse trees_
+
+3. Extracting the traces to a parse tree.
+
+   Section 1.7 _Mining Traces Generated_ in the Jupyter notebook.
+
+4. Active learning of labelling (Section 4.1, 4.2 in paper)
+
+   Section 1.8 _Generalize Nodes_ in the Jupyter notebook
+   Section 4.1 in the paper corresponds to Section 1.8.1 in Jupyter notebook
+   Section 4.2 in the paper corresponds to Section 1.8.2 in Jupyter notebook
+
+### Paper: Section 5 _Grammar Inferrence_
+
+5. Generating the grammar from the collected parse trees.
+
+   Section 1.9 _Generating a grammar_ in the Jupyter notebook.
+
+### Paper: Section 6 _Evaluation_
+
+  Section 2 _Evaluation_ in the Jupyter notebook
 
 ## How to add a new subject
+
+We discuss how to add Python and C subjects below.
 
 ### Adding a new Python program
 
