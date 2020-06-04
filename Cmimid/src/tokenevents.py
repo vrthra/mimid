@@ -270,7 +270,7 @@ def fire_events(gen_events, inputstring):
 
 METHOD_PREFIX = None
 NOIGNORE_OPS = {'tokencomp'}
-def process_events(events, inputstring):
+def process_events(events, inputstring, event_dir):
     global METHOD_PREFIX
     gen_events = []
 
@@ -294,7 +294,7 @@ def process_events(events, inputstring):
 
             pass
     assert not cmimid_stack
-    return fire_events(gen_events, inputstring)
+    return fire_events(gen_events, inputstring, event_dir)
 
 def usage():
     print("""
@@ -325,7 +325,7 @@ def main(args):
         assert max_len == os.path.getsize(ifile)
 
         events = read_json(arg)
-        ret = process_events(events, inputstr)
+        ret = process_events(events, inputstr, event_dir)
         returns.append(ret)
     print(json.dumps(returns))
 
