@@ -57,6 +57,8 @@ $ md5sum mimid.box
 2bd3966d24ea01c9cbea44d2797c20b3  mimid.box
 ```
 
+**IMPORTANT:** If you want to recreate the virtual box, simply execute `make box-create` in the root directory.
+
 #### Importing the box
 
 The vagrant box can be imported as follows:
