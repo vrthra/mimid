@@ -308,7 +308,7 @@ events.py <subject dir>
     """)
     sys.exit(0)
 
-def main(args)
+def main(args):
     if not args or args[0] == '-h': usage()
     event_dir = args[0]
     returns = []
