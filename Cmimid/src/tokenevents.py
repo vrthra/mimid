@@ -208,7 +208,7 @@ def show_nested(gen_events):
         elif '_exit' in e[0]:
             indent -= 1
             print("|\t" * indent, e)
-def fire_events(gen_events, inputstring, event_dir):
+def fire_events(gen_events, inputstring, event_dir, ifile):
     comparisons = []
     taints.trace_init()
     method = []
@@ -270,7 +270,7 @@ def fire_events(gen_events, inputstring, event_dir):
 
 METHOD_PREFIX = None
 NOIGNORE_OPS = {'tokencomp'}
-def process_events(events, inputstring, event_dir):
+def process_events(events, inputstring, event_dir, ifile):
     global METHOD_PREFIX
     gen_events = []
 
@@ -294,7 +294,7 @@ def process_events(events, inputstring, event_dir):
 
             pass
     assert not cmimid_stack
-    return fire_events(gen_events, inputstring, event_dir)
+    return fire_events(gen_events, inputstring, event_dir, ifile)
 
 def usage():
     print("""
@@ -325,7 +325,7 @@ def main(args):
         assert max_len == os.path.getsize(ifile)
 
         events = read_json(arg)
-        ret = process_events(events, inputstr, event_dir)
+        ret = process_events(events, inputstr, event_dir, ifile)
         returns.append(ret)
     print(json.dumps(returns))
 
