@@ -15,6 +15,9 @@ LIBCLANG_PATH=/usr/lib/llvm-8/lib/libclang.so
 CLANG_FORMAT=/usr/local/Cellar/llvm/8.0.1/bin/clang-format
 CLANG_FORMAT=/usr/lib/llvm-8/bin/clang-format
 
+# set this to copy if not using a golden grammar
+KIND=generate
+
 all: help
 	@echo
 
@@ -54,7 +57,16 @@ build/%.d: examples/%.c src/instrument.py | build
 build/%.input: examples/%.input | build
 	cat $< > $@
 
-build/%.inputs.done: examples/%.grammar
+
+build/%.inputs.done: build/%.inputs.done.$(KIND)
+	touch $@
+
+build/%.inputs.done.copy: examples/%.grammar
+	mkdir -p build/$*
+	for i in examples/$*.input.*; do echo $$i; cp $$i build/; done
+	touch $@
+
+build/%.inputs.done.generate: examples/%.grammar
 	mkdir -p build/$*
 	#for i in examples/$*.input.*; do echo $$i; cp $$i build/; done
 	$(PYTHON) src/generateinputs.py examples/$*.grammar $* ./build/$*.out ./build/ 100
@@ -152,8 +164,8 @@ subjects:
 	@echo "These are the main subjects."
 	@for i in $(SUBJECTS); do echo $$i; for j in examples/$$i.*; do echo " " $$j; done; echo; done
 	@echo
-	@echo "These are possible subjects (contains both a .c file and .input.x file)."
-	@find examples/ -name \*.input\* | sed -e 's#.input.*$$##g' -e 's#^examples/##g' \
+	@echo "These are possible subjects (contains both a .c file and .grammar file)."
+	@find examples/ -name \*.grammar | sed -e 's#.grammar$$##g' -e 's#^examples/##g' \
 		| sort -u | while read a; do \
 		if [ -f examples/$$a.c ]; then echo $$a; for p in examples/$$a.*; do echo "  $$p"; done; \
 		fi; \

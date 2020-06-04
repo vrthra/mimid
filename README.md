@@ -335,7 +335,7 @@ algorithm. Each method is thoroughly documented,
 and executions of methods can be performed to verify their behavior.
 Use the Jupyter notebook 
 [src/PymimidBook.ipynb](https://github.com/vrthra/mimid/blob/master/src/PymimidBook.ipynb)
-as the main guide.
+as the main guide, and for interactive exploration of the algorithms.
 
 The algorithm consists of the following parts. The part in the paper is given
 as a heading, and the corresponding parts in Jupyter notebook are noted below.
@@ -386,7 +386,12 @@ parser combinator implementation. Both are discussed below.
 
 **IMPORTANT:** We assume that you have the program as well as the sample inputs.
 Both are required for grammar mining. In particular, we can only mine the
-features that are exercised by the given set of samples.
+features that are exercised by the given set of samples. Instead of the sample
+inputs, one can also provide a golden grammar which can be used instead to
+generate inputs (that may or may not be accepted by the program --- i.e the
+grammar implemented need not be in sync with the golden grammar, but rather,
+we can use the golden grammar to explore the implementation --- We only use
+accepted inputs for mining).
 
 Ensure that the program has no external calls during parsing such as [shlex](https://docs.python.org/3/library/shlex.html)
 or other lexers. For ease of explanation, we assume that you have a single
@@ -537,6 +542,20 @@ C examples.
 vm$ cd ~/mimid/Cmimid
 ```
 
+Check the targets supported by the `Makefile` as below:
+
+```bash
+vm$ make help
+```
+
+For subject specific help, use help-subject
+
+E.g.
+
+```bash
+vm$ make help-tiny
+```
+
 To add a new C program, we assume that the program you have is a single C file
 called `ex.c`. The `ex.c` is assumed to read inputs both from `stdin` as well as
 as an argument to the program, which is then processed by the parsing function
@@ -576,22 +595,30 @@ int main(int argc, char *argv[]) {
 }
 ```
 
-Place the program under `examples/`. Further, provide the sample inputs to your
-program as `ex.input.1`, `ex.input.2` etc. under the same directory (please
-follow the `*.input.<n>` naming convention. It is required for the `make`).
+Place the program under `examples/`. Further, provide the golden grammar of
+your program as `ex.grammar` under the same directory.
 
 E.g:
 
 ```bash
 vm$ ls examples/ex.*
-examples/ex.c examples/ex.input.1 examples/ex.input.2 examples/ex.input.3
+examples/ex.c examples/ex.grammar
 ```
+
+The golden grammar `examples/ex.grammar` is used to generate inputs.
+
+One can also provide sample inputs, in which case, they can be used instead.
+In that case, place the program under `examples/` as before. Then, provide
+the sample inputs to your program as `ex.input.1`, `ex.input.2` etc. under
+the same directory (please follow the `*.input.<n>` naming convention.
+It is required for the `make`). Then edit the `Makefile` and set the
+`KIND` variable in `Makefile` to `copy`.
 
 Next, check whether your program has a lexer or a tokenizer. A lexer
 reads the input, and splits it into predefined tokens before it is passed
 into the program. For an example of a program that uses a lexer,
-see `examples/mjs.c` where the lexer is `static int pnext(struct pstate *p)`. For
-an example of a program that does not use a lexer, see `examples/cgi_decode.c`
+see `examples/mjs.c` where the lexer is `static int pnext(struct pstate *p)`.
+For an example of a program that does not use a lexer, see `examples/cgi_decode.c`
 where each character is processed directly by the parser.
 
 If it has a lexer, then edit the `Makefile`, and define a target
@@ -628,5 +655,87 @@ Similarly, the recall can be extracted with:
 ```bash
 vm$ make build/ex.fuzz
 vm$ cat build/ex.fuzz
+```
+
+Note that one can also proceed step by step,
+
+1. First compiling and instrumenting the program:
+
+```bash
+vm$ make build/tiny.x
+vm$ make build/tiny.d
+```
+
+2. Then generating inputs using the provided golden grammar
+   (If copying the sample inputs, **edit** the `Makefile` and set `KIND=copy`
+   then run the command --- simply passing the variable in the command line
+   will not work)
+
+```bash
+vm$ make build/tiny.inputs.done
+```
+
+3. Running the instrumented program to collect the traces
+
+```bash
+vm$ make build/tiny.json.done
+```
+
+4. Extract the `mimid` buffer access events with control flow annotation
+
+```bash
+vm$ make build/tiny.events
+```
+
+5. Extract the parse trees from the collected events.
+
+```bash
+vm$ make build/tiny.tree
+```
+
+After this, the following command can be used to view the parse trees generated
+using ascii art.
+
+```bash
+vm$ make build/tiny.showtree
+```
+
+6. Extract the generalized grammar from the parse trees
+
+```bash
+vm$ make build/tiny.mgrammar
+```
+
+7. Convert the generalized grammar to a compact EBNF form
+
+```bash
+vm$ make build/tiny.grammar
+```
+
+After this, the following command can be used to inspect the grammar generated
+in a colorized form:
+
+```bash
+vm$ make build/tiny.showg
+```
+
+8. Convert the grammar to the `fuzzingbook` canonical representation for parsing
+
+```bash
+vm$ make build/tiny.pgrammar
+```
+
+At this point, one can evaluate the `precision` and `recall` as follows:
+
+**Precision**
+
+```bash
+vm$ make build/tiny.precision
+```
+
+**Recall**
+
+```bash
+vm$ make build/tiny.fuzz
 ```
 
