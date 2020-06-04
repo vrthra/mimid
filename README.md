@@ -19,6 +19,14 @@ viewed using any of the Jupyter notebook viewers such as VSCode. A
 non-interactive version hosted at Github is accessible [from this link](https://github.com/vrthra/mimid/blob/master/src/PymimidBook.ipynb)
 (If the load fails, click reload until you can view it).
 
+## Rebuilding the vagrant box
+
+If you want to recreate the virtual box, simply execute `make box-create` in the root directory.
+
+```bash
+$ make box-create
+```
+
 ## Prerequisites
 
 ### RAM
@@ -56,8 +64,6 @@ and should have the following _md5_ checksum.
 $ md5sum mimid.box
 2bd3966d24ea01c9cbea44d2797c20b3  mimid.box
 ```
-
-**IMPORTANT:** If you want to recreate the virtual box, simply execute `make box-create` in the root directory.
 
 #### Importing the box
 
