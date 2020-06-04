@@ -10,7 +10,24 @@ import re
 import fuzz as F
 import fuzzingbook.Parser as P
 
+def usage():
+    print("""
+check_precision.py: <golden grammar> <inferred grammar> <non-instrumented executable> <working directory> <count attempts>
+    Used for checking the precision of the provided grammar. We generate inputs
+    using the golden grammar, identify the semantically valid ones using non
+    instrumented executable, and run these valid inputs against a parser using
+    inferred grammar. The output is how many of these valid inputs were parsed
+    by the parser.
+    <golden grammar>:   The externally provided grammar that is used to generate inputs.
+    <inferred grammar>: The inferred grammar from program
+    <non-instrumented executable>: The non instrumented executable to first verify the inputs against.
+    <working-directory>: a working directory
+    <count attempts>: Number of valid inputs to generate
+    """)
+    sys.exit(0)
+
 def main(args):
+    if not args: usage()
     errors = []
     with open(args[0]) as f:
         golden = json.load(f)
