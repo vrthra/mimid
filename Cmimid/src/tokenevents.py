@@ -254,7 +254,7 @@ def fire_events(gen_events, inputstring):
             idx = e[1]
             method_, stackdepth_, mid = taints.get_current_method()
             comparisons.append((idx, inputstring[idx], mid))
-            print(repr(inputstr[idx]), '-' * mimid_context.indent, mid, file=sys.stderr)
+            print(repr(inputstring[idx]), '-' * mimid_context.indent, mid, file=sys.stderr)
 
 
     j = { 'comparisons_fmt': 'idx, char, method_call_id',
