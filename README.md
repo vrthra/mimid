@@ -5,7 +5,7 @@
 
 Our submission is a tool that implements the algorithm given in the paper
 _Mining Input Grammars From Dynamic Control Flow_.
-We provide the virtual machine [mimid](https://doi.org/10.5281/zenodo.3875529)
+We provide the virtual machine [mimid](https://doi.org/10.5281/zenodo.3876969)
 which contains the complete artifacts necessary to
 reproduce our experiments. We describe the process of invoking the virtual
 machine below.
@@ -57,7 +57,7 @@ local port 8888 to the host machine.
 
 Next, please download the vagrant box from the following link:
 
-https://doi.org/10.5281/zenodo.3875529
+https://doi.org/10.5281/zenodo.3876969
 
 This produces a file called `mimid.box` which is 2.6 GB in size
 (the commands in the host system are indicated by
