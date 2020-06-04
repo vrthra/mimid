@@ -15,6 +15,9 @@ LIBCLANG_PATH=/usr/lib/llvm-8/lib/libclang.so
 CLANG_FORMAT=/usr/local/Cellar/llvm/8.0.1/bin/clang-format
 CLANG_FORMAT=/usr/lib/llvm-8/bin/clang-format
 
+all: help
+	@echo
+
 instrument: | build
 	CFLAGS=$(CFLAGS) LIBCLANG_PATH=$(LIBCLANG_PATH) $(PYTHON) ./src/instrument.py examples/$(EXAMPLE_C_SOURCE) | $(CLANG_FORMAT) > build/$(EXAMPLE_C_SOURCE)
 
@@ -143,3 +146,38 @@ precision: build/tiny.precision build/mjs.precision build/json.precision
 
 fuzz: build/tiny.fuzz build/mjs.fuzz build/json.fuzz
 	cat build/*.fuzz
+
+SUBJECTS=tiny mjs json
+subjects:
+	@for i in $(SUBJECTS); do echo $$i; for j in examples/$$i.*; do echo " " $$j; done; echo; done
+
+help:
+	@echo "help: Following top level targets are supported:"
+	@echo "	help: This message"
+	@echo "	subjects: List all subjects and their corresponding files."
+	@echo "	precision: Compute the precision of each subject."
+	@echo "	fuzz: Compute the recall of each subject."
+	@echo "	clean: Remove files from build."
+	@echo "	clobber: Remove files from build as well as clean the LLVM build directory."
+	@echo
+	@for i in $(SUBJECTS); do echo help-$$i: specific help and targets for the subject $$i; echo; done
+
+help-%:
+	@echo $*: Corresponding files
+	@for i in examples/$*.*; do echo " " $$i; done
+	@echo Targets:
+	@echo "  build/$*.precision          -- Run the precision experiment"
+	@echo "  build/$*.fuzz               -- Run the recall experiment"
+	@echo "  build/$*.grammar            -- Extract the grammar (ebnf)"
+	@echo "  build/$*.showg              -- Show the extracted grammar (pretty)"
+	@echo "  build/$*.showtree           -- Show the tree representation of all inputs (pretty)"
+	@echo
+	@echo Secondary targets
+	@echo "  build/$*.inputs.done        -- Generate inputs from a golden grammar"
+	@echo "  build/$*.x                  -- Generate the non-instrumented program"
+	@echo "  build/$*.d                  -- Generate the instrumented program"
+	@echo "  build/$*.json.done          -- Run the instrumented program with inputs"
+	@echo "  build/$*.events             -- Extract the buffer access from instrumented traces"
+	@echo "  build/$*.tree               -- Extract the (generalized) parse tree from traces"
+	@echo "  build/$*.mgrammar           -- Extract the grammar from trees"
+	@echo "  build/$*.pgrammar           -- Extract the parsable grammar (fuzzingbook)"
