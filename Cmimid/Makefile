@@ -149,7 +149,15 @@ fuzz: build/tiny.fuzz build/mjs.fuzz build/json.fuzz
 
 SUBJECTS=tiny mjs json
 subjects:
+	@echo "These are the main subjects."
 	@for i in $(SUBJECTS); do echo $$i; for j in examples/$$i.*; do echo " " $$j; done; echo; done
+	@echo
+	@echo "These are possible subjects (contains both a .c file and .input.x file)."
+	@find examples/ -name \*.input\* | sed -e 's#.input.*$$##g' -e 's#^examples/##g' \
+		| sort -u | while read a; do \
+		if [ -f examples/$$a.c ]; then echo $$a; for p in examples/$$a.*; do echo "  $$p"; done; \
+		fi; \
+		done
 
 help:
 	@echo "help: Following top level targets are supported:"
