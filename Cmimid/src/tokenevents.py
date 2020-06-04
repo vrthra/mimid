@@ -208,7 +208,7 @@ def show_nested(gen_events):
         elif '_exit' in e[0]:
             indent -= 1
             print("|\t" * indent, e)
-def fire_events(gen_events, inputstring):
+def fire_events(gen_events, inputstring, event_dir):
     comparisons = []
     taints.trace_init()
     method = []
