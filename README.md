@@ -739,3 +739,8 @@ vm$ make build/tiny.precision
 vm$ make build/tiny.fuzz
 ```
 
+We also note that each command line invoked by the make can also be invoked
+directly. All command lines take a flat `-h` which provides information on
+its argument, and how it is used. We have opted to keep the documentation
+in the Jupyter notebook, and simply generate the modules in the interests
+of DRY principle.
