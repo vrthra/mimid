@@ -32,7 +32,7 @@ $ make box-create
 
 This paper presents a novel general algorithm for mining the input grammar
 of a given program. Our algorithm _mimid_ takes a program and a small
-set of inputs, and automatically infers a readable (upto) context-free 
+set of inputs, and automatically infers a readable (upto) context-free
 grammar that captures the input language of the program. Our progarm
 relies only on having access to _access patterns_ in the initial input
 buffer from different locations in the parser. Our technique works on all
@@ -333,7 +333,7 @@ mined by *mimid* from `mjs` (Table 2).
 The Jupyter notebook provided has complete documentation of the entire
 algorithm. Each method is thoroughly documented,
 and executions of methods can be performed to verify their behavior.
-Use the Jupyter notebook 
+Use the Jupyter notebook
 [src/PymimidBook.ipynb](https://github.com/vrthra/mimid/blob/master/src/PymimidBook.ipynb)
 as the main guide, and for interactive exploration of the algorithms.
 
@@ -611,8 +611,25 @@ One can also provide sample inputs, in which case, they can be used instead.
 In that case, place the program under `examples/` as before. Then, provide
 the sample inputs to your program as `ex.input.1`, `ex.input.2` etc. under
 the same directory (please follow the `*.input.<n>` naming convention.
-It is required for the `make`). Then edit the `Makefile` and set the
-`KIND` variable in `Makefile` to `copy`.
+It is required for the `make`).
+
+Note that the original abstract target is the following, where `KIND` is set
+to `generate` from grammar.
+
+```
+build/%.inputs.done: build/%.inputs.done.$(KIND)
+    touch $@
+```
+
+Since we are providing a set of inputs, we only need to copy.
+Hence *edit* the `Makefile` and *add* a new target for this file as below.
+
+```
+build/ex.inputs.done: build/ex.inputs.done.copy
+    touch $@
+```
+
+IMPORTANT: Note that the `KIND` part of the receipt is set to `copy`.
 
 Next, check whether your program has a lexer or a tokenizer. A lexer
 reads the input, and splits it into predefined tokens before it is passed
@@ -667,9 +684,9 @@ vm$ make build/tiny.d
 ```
 
 2. Then generating inputs using the provided golden grammar
-   (If copying the sample inputs, **edit** the `Makefile` and set `KIND=copy`
-   then run the command --- simply passing the variable in the command line
-   will not work)
+   (If copying the sample inputs, *edit* the `Makefile` and add a new receipt
+   for the inputs as described previously, with the KIND set to `copy` for this
+   particular target.)
 
 ```bash
 vm$ make build/tiny.inputs.done
@@ -694,7 +711,7 @@ vm$ make build/tiny.tree
 ```
 
 After this, the following command can be used to view the parse trees generated
-using ascii art.
+using ASCII art.
 
 ```bash
 vm$ make build/tiny.showtree
@@ -744,3 +761,130 @@ directly. All command lines take a flat `-h` which provides information on
 its argument, and how it is used. We have opted to keep the documentation
 in the Jupyter notebook, and simply generate the modules in accordance with
 the DRY principle.
+
+E.g Viewing the trees at different stages of generalization.
+
+```bash
+vm$ python3 ./src/ftree.py
+ftree.py <json file> <tree numbers>*
+    Display the selected trees from <json file>
+    if <tree numbers> is empty, all trees are shown if not, only selected trees are shown
+```
+
+Using it:
+
+```bash
+vm $ python3 ./src/ftree.py build/tiny.tree 1 2 | less -r
+o )if ( a < a ); else ; else { ; }}else ; '
+b'<START>'
++-- b'<_real_program_main(1).0>'
+    +-- b'<parse_expr.0>'
+            +-- b'<program.0>'
+                        |-- b'<statement.0>'
+...
+```
+
+The parse trees in in-between stages can also be inspected:
+
+```bash
+vm$ ls build/tiny-*tree*
+build/tiny-loop_trees.json  build/tiny-method_trees.json  build/tiny-trees.json
+```
+
+For example, the initial parse tree is in `build/tiny-trees.json`. The first
+tree before generalization can be viewed as
+
+```bash
+vm $ python3 ./src/ftree.py build/tiny-trees.json 0 | less -r
+```
+
+The next generalization stage is methods. The result can be seen as
+
+```bash
+vm $ python3 ./src/ftree.py build/tiny-method_trees.json 0 | less -r
+```
+
+The final generalization stage (copied to `build/tiny.tree`) is `build/tiny-loop_trees.json`
+which can be viewed as
+
+```bash
+vm $ python3 ./src/ftree.py build/tiny-loop_trees.json 0 | less -r
+```
+
+Similarly, any of the in-between grammars can be inspected. For example, the
+non-generalized mined grammar is `build/tiny-mined_g.json` which can be viewed
+as:
+
+```bash
+vm$ cat build/tiny-mined_g.json | jq . -C | less -r
+{
+  "[start]": "<START>",
+    "[grammar]": {
+    . . .
+  },
+  "[command]": "build/tiny.x"
+}
+```
+
+where `[start]` is the start symbol, `[grammar]` is the grammar in the *Fuzzingbook*
+canonical JSON format, and `[command]` is the un-instrumented program that
+accepts the grammar (The instrumented program from which the grammar was mined
+can be obtained by substituting `.x` with `.d`.)
+
+After tokens are generalized, it becomes `build/tiny-general_tokens.json`
+(before compaction), which can be viewed as
+
+```bash
+vm$ cat build/tiny-general_tokens.json | jq . -C | less -r
+```
+
+The defined top level keys are:
+
+```bash
+vm$ cat build/tiny.grammar | jq '. | keys'
+[
+  "[command]",
+  "[grammar]",
+  "[start]"
+]
+```
+
+Note that the tree formats are also fixed.
+
+```bash
+vm$ cat build/tiny.tree | jq '.[0] | keys'
+[
+  "arg",
+  "original",
+  "tree"
+]
+```
+
+For example, one can access the input file that generated a particular tree (`0`) using:
+
+```bash
+vm$ cat build/tiny.tree | jq '.[0].arg' -C
+```
+
+and tree itself is
+
+```bash
+vm$ cat build/tiny.tree | jq '.[0].tree' -C | less -r
+```
+
+Finally, `.original` contains the (un-instrumented) program from which grammar
+was mined.
+
+```bash
+vm$ cat build/tiny.tree | jq '.[0].original' -C | less -r
+```
+
+
+## Notes
+
+The complete run (below command line) can take up to 10 hours to complete.
+
+```
+vm$ ./start_c_tests.sh && ./start_py_tests.sh
+```
+
