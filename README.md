@@ -826,9 +826,12 @@ vm$ cat build/tiny-mined_g.json | jq . -C | less -r
 }
 ```
 
-** Grammar Format **
 
-where `[start]` is the start symbol, `[grammar]` is the grammar in the [Fuzzingbook](https://www.fuzzingbook.org/html/Parser.html)
+where `[start]` is the start symbol.
+
+**Grammar Format**
+
+The `[grammar]` is the grammar in the [Fuzzingbook](https://www.fuzzingbook.org/html/Parser.html)
 canonical JSON format, where the nonterminals are represented as keys of a
 python `dict`, and each nonterminal is associated with a definition represented
 by an `list` of `rules`, and each `rule` is again a `list` of tokens, and each
@@ -887,7 +890,7 @@ Finally, tree itself is
 vm$ cat build/tiny.tree | jq '.[0].tree' -C | less -r
 ```
 
-** Derivation Tree Format **
+**Derivation Tree Format**
 
 The tree format is again from the [Fuzzingbook](https://www.fuzzingbook.org/html/Parser.html),
 where the derivation tree is represented as a recursive structure with each node
