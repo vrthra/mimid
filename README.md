@@ -771,16 +771,16 @@ ftree.py <json file> <tree numbers>*
     if <tree numbers> is empty, all trees are shown if not, only selected trees are shown
 ```
 
-Using it:
+Using it (the first line is the string that was parsed.):
 
 ```bash
 vm $ python3 ./src/ftree.py build/tiny.tree 1 2 | less -r
 o )if ( a < a ); else ; else { ; }}else ; '
-b'<START>'
-+-- b'<_real_program_main(1).0>'
-    +-- b'<parse_expr.0>'
-            +-- b'<program.0>'
-                        |-- b'<statement.0>'
+'<START>'
++-- '<_real_program_main(1).0>'
+    +-- '<parse_expr.0>'
+            +-- '<program.0>'
+                        |-- '<statement.0>'
 ...
 ```
 
