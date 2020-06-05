@@ -826,8 +826,15 @@ vm$ cat build/tiny-mined_g.json | jq . -C | less -r
 }
 ```
 
-where `[start]` is the start symbol, `[grammar]` is the grammar in the *Fuzzingbook*
-canonical JSON format, and `[command]` is the un-instrumented program that
+** Grammar Format **
+
+where `[start]` is the start symbol, `[grammar]` is the grammar in the [Fuzzingbook](https://www.fuzzingbook.org/html/Parser.html)
+canonical JSON format, where the nonterminals are represented as keys of a
+python `dict`, and each nonterminal is associated with a definition represented
+by an `list` of `rules`, and each `rule` is again a `list` of tokens, and each
+token can either be a nonterminal or a terminal symbol represented as a string.
+
+The `[command]` is the un-instrumented program that
 accepts the grammar (The instrumented program from which the grammar was mined
 can be obtained by substituting `.x` with `.d`.)
 
@@ -866,19 +873,29 @@ For example, one can access the input file that generated a particular tree (`0`
 vm$ cat build/tiny.tree | jq '.[0].arg' -C
 ```
 
-and tree itself is
-
-```bash
-vm$ cat build/tiny.tree | jq '.[0].tree' -C | less -r
-```
-
-Finally, `.original` contains the (un-instrumented) program from which grammar
+The `.original` contains the (un-instrumented) program from which grammar
 was mined.
 
 ```bash
 vm$ cat build/tiny.tree | jq '.[0].original' -C | less -r
 ```
 
+
+Finally, tree itself is
+
+```bash
+vm$ cat build/tiny.tree | jq '.[0].tree' -C | less -r
+```
+
+** Derivation Tree Format **
+
+The tree format is again from the [Fuzzingbook](https://www.fuzzingbook.org/html/Parser.html),
+where the derivation tree is represented as a recursive structure with each node
+represented by a tuple or pair list with the first element, the
+nonterminal that corresponds to that node, and the second element the children
+of that node, and remaining elements contain any meta information associated
+with the node. The terminal symbols are represented by nodes with empty
+children.
 
 ## Notes
 
