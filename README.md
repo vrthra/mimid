@@ -72,7 +72,7 @@ and should have the following _md5_ checksum.
 
 ```bash
 $ md5sum mimid.box
-2bd3966d24ea01c9cbea44d2797c20b3  mimid.box
+431f6ded243e91dcd5077b00ae2aa9b3 mimid.box
 ```
 
 #### Importing the box
